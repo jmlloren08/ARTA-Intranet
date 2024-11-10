@@ -22,6 +22,11 @@ const DetailedList = () => {
     });
 
     const [activities, setActivities] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    }
 
     const openAddModal = () => {
         setEditItem('');
@@ -99,7 +104,6 @@ const DetailedList = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="flex space-x-4 border-b border-gray-300">
                     {['All', 'Completed', 'In progress', 'Not started', 'Blocked'].map((status, index) => (
                         <button
@@ -111,7 +115,16 @@ const DetailedList = () => {
                         </button>
                     ))}
                 </div>
-                <SummaryList activities={activities} openEditModal={openEditModal} />
+                <div className="flex items-center m-2">
+                    <input
+                        type='text'
+                        placeholder='Search activities...'
+                        className='p-2 w-full'
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
+                </div>
+                <SummaryList activities={activities.filter(activity => activity.work_item.toLowerCase().includes(searchTerm.toLowerCase()))} openEditModal={openEditModal} />
             </div >
         </>
     );

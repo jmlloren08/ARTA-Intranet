@@ -6,11 +6,9 @@ import Select from 'react-select';
 
 const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormData, isEditMode }) => {
 
-    const [formData, setFormData] = useState(initialFormData || '');
+    const [formData, setFormData] = useState('');
     const [offices, setOffices] = useState([]);
     const [names, setNames] = useState([]);
-    const [filteredOffices, setFilteredOffices] = useState([]);
-    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         axios.get('/get-names')
@@ -71,8 +69,11 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
 
     useEffect(() => {
         if (isOpen && initialFormData) {
-            setFormData(isEditMode && initialFormData ? initialFormData : '');
-            setInputValue(initialFormData?.category || '');
+            const processedFormData = {
+                ...initialFormData,
+                assigned_to: typeof initialFormData.assigned_to === 'string' ? initialFormData.assigned_to.split(',').map(name => name.trim()) : initialFormData.assigned_to || []
+            }
+            setFormData(isEditMode ? processedFormData : '');
         }
     }, [isOpen, initialFormData, isEditMode]);
 
@@ -201,6 +202,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 value={formData.key_stakeholders || ''}
                                 onChange={handleChange}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                required
                             />
                         </div>
                         <div>
@@ -211,6 +213,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 value={formData.remarks || ''}
                                 onChange={handleChange}
                                 className="w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300"
+                                required
                             />
                         </div>
                         <div className="flex justify-end space-x-2">
@@ -224,6 +227,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 type="button"
                                 onClick={handleClose}
                                 className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                                required
                             >
                                 Cancel
                             </button>

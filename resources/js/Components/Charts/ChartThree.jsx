@@ -7,8 +7,8 @@ const ChartThree = ({ data }) => {
     'Completed': '#28a745',
     'In progress': '#007bff',
     'Not started': '#f39c12',
-    'Blocked': '#dc3545',
-  };
+    'Blocked': '#dc3545'
+  }
 
   const [options, setOptions] = useState({
     series: [0, 0, 0, 0],
@@ -23,12 +23,6 @@ const ChartThree = ({ data }) => {
         }
       }
     },
-    color: [
-      colorMap['Completed'],
-      colorMap['In progress'],
-      colorMap['Not started'],
-      colorMap['Blocked']
-    ],
     labels: ['Completed', 'In progress', 'Not started', 'Blocked'],
     legend: {
       show: true,
@@ -36,7 +30,13 @@ const ChartThree = ({ data }) => {
     },
     dataLabels: {
       enabled: false
-    }
+    },
+    colors: [
+      colorMap['Completed'],
+      colorMap['In progress'],
+      colorMap['Not started'],
+      colorMap['Blocked'],
+    ]
   });
 
   useEffect(() => {

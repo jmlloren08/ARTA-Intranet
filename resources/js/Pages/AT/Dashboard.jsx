@@ -9,7 +9,6 @@ import { Head } from '@inertiajs/react';
 const Dashboard = () => {
 
     const [data, setData] = useState({
-        all: 0,
         completed: 0,
         inProgress: 0,
         notStarted: 0,

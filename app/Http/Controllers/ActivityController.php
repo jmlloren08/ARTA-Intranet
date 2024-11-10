@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activities;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -22,10 +21,10 @@ class ActivityController extends Controller
                 'complexity' => 'required|string',
                 'start_date' => 'required|date',
                 'due_date' => 'required|date|after_or_equal:start_date',
-                'assigned_to' => 'nullable|array',
-                'assigned_to.*' => 'nullable|string',
-                'key_stakeholders' => 'nullable|string',
-                'remarks' => 'nullable|string'
+                'assigned_to' => 'required|array',
+                'assigned_to.*' => 'required|string',
+                'key_stakeholders' => 'required|string',
+                'remarks' => 'required|string'
             ]);
 
             if (isset($validatedData['assigned_to']) && is_array($validatedData['assigned_to'])) {
@@ -43,7 +42,7 @@ class ActivityController extends Controller
                 'complexity' => $validatedData['complexity'],
                 'start_date' => $validatedData['start_date'],
                 'due_date' => $validatedData['due_date'],
-                'assigned_to' => $validatedData['assigned_to'],  // Save as comma-separated string
+                'assigned_to' => $validatedData['assigned_to'],
                 'key_stakeholders' => $validatedData['key_stakeholders'],
                 'remarks' => $validatedData['remarks'],
                 'created_by' => auth()->user()->name
@@ -68,10 +67,10 @@ class ActivityController extends Controller
                 'complexity' => 'required|string',
                 'start_date' => 'required|date',
                 'due_date' => 'required|date|after_or_equal:start_date',
-                'assigned_to' => 'nullable|array',
-                'assigned_to.*' => 'nullable|string',
-                'key_stakeholders' => 'nullable|string',
-                'remarks' => 'nullable|string'
+                'assigned_to' => 'required|array',
+                'assigned_to.*' => 'required|string',
+                'key_stakeholders' => 'required|string',
+                'remarks' => 'required|string'
             ]);
 
             if (isset($validatedData['assigned_to']) && is_array($validatedData['assigned_to'])) {
