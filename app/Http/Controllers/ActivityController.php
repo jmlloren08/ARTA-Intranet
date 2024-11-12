@@ -22,18 +22,14 @@ class ActivityController extends Controller
                 'start_date' => 'required|date',
                 'due_date' => 'required|date|after_or_equal:start_date',
                 'assigned_to' => 'required|array',
-                'assigned_to.*' => 'required|string',
+                'assigned_to.*' => 'required|integer|exists:users,id',
                 'key_stakeholders' => 'required|string',
                 'remarks' => 'required|string'
             ]);
 
-            if (isset($validatedData['assigned_to']) && is_array($validatedData['assigned_to'])) {
-                $validatedData['assigned_to'] = implode(',', $validatedData['assigned_to']);
-            }
-
             $work_id = Str::random(24);
 
-            Activities::create([
+            $activity = Activities::create([
                 'work_id' => $work_id,
                 'work_item' => $validatedData['work_item'],
                 'description' => $validatedData['description'],
@@ -42,11 +38,12 @@ class ActivityController extends Controller
                 'complexity' => $validatedData['complexity'],
                 'start_date' => $validatedData['start_date'],
                 'due_date' => $validatedData['due_date'],
-                'assigned_to' => $validatedData['assigned_to'],
                 'key_stakeholders' => $validatedData['key_stakeholders'],
                 'remarks' => $validatedData['remarks'],
                 'created_by' => auth()->user()->name
             ]);
+
+            $activity->users()->attach($validatedData['assigned_to']);
 
             return response()->json(['message' => 'Work item added successfully.']);
         } catch (\Exception $e) {
@@ -68,18 +65,27 @@ class ActivityController extends Controller
                 'start_date' => 'required|date',
                 'due_date' => 'required|date|after_or_equal:start_date',
                 'assigned_to' => 'required|array',
-                'assigned_to.*' => 'required|string',
+                'assigned_to.*' => 'required|integer|exists:users,id',
                 'key_stakeholders' => 'required|string',
                 'remarks' => 'required|string'
             ]);
 
-            if (isset($validatedData['assigned_to']) && is_array($validatedData['assigned_to'])) {
-                $validatedData['assigned_to'] = implode(',', $validatedData['assigned_to']);
-            }
-
             $activitiesData = Activities::findOrFail($id);
 
-            $activitiesData->update($validatedData);
+            $activitiesData->update([
+                'work_item' => $validatedData['work_item'],
+                'description' => $validatedData['description'],
+                'category' => $validatedData['category'],
+                'progress' => $validatedData['progress'],
+                'complexity' => $validatedData['complexity'],
+                'start_date' => $validatedData['start_date'],
+                'due_date' => $validatedData['due_date'],
+                'key_stakeholders' => $validatedData['key_stakeholders'],
+                'remarks' => $validatedData['remarks'],
+                'created_by' => auth()->user()->name
+            ]);
+
+            $activitiesData->users()->sync($validatedData['assigned_to']);
 
             return response()->json(['message' => 'Work item updated successfully.']);
         } catch (\Exception $e) {
@@ -92,18 +98,41 @@ class ActivityController extends Controller
     {
         try {
 
-            $activities = Activities::select('id', 'work_item', 'description', 'category', 'progress', 'complexity', 'start_date', 'due_date', 'assigned_to', 'key_stakeholders', 'remarks')
+            $activities = Activities::with('users:id,name')
+                ->select('id', 'work_item', 'description', 'category', 'progress', 'complexity', 'start_date', 'due_date', 'assigned_to', 'key_stakeholders', 'remarks')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
-            return response()->json($activities);
+            $formattedActivities = $activities->map(function ($activity) {
+                $activity->assigned_to = $activity->users->map(function ($user) {
+                    return ['id' => $user->id, 'name' => $user->name];
+                });
+                return $activity;
+            });
+
+            return response()->json($formattedActivities);
         } catch (\Exception $e) {
 
             Log::error("Error fetching data: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
+    public function getActivitiesWhereStatus(Request $request)
+    {
+        try {
+            $status = $request->status;
+            $activitiesWhereStatus = Activities::where('progress', $status)
+                ->select('work_item', 'description', 'category', 'progress', 'complexity', 'start_date', 'due_date', 'assigned_to', 'key_stakeholders', 'remarks')
+                ->orderBy('updated_at', 'desc')
+                ->get();
 
+            return response()->json($activitiesWhereStatus);
+        } catch (\Exception $e) {
+
+            Log::error("Error fetching data: " . $e->getMessage());
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
+    }
     public function getCountActivities()
     {
         try {

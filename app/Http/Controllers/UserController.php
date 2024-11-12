@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         try {
 
-            $names = User::select('name')->get();
+            $names = User::select('id', 'name')->get();
 
             return response()->json($names);
         } catch (\Exception $e) {

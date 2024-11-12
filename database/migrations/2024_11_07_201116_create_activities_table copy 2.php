@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('category');
             $table->string('progress');
             $table->string('complexity');
-            $table->timestamp('start_date');
-            $table->timestamp('due_date');
+            $table->date('start_date');
+            $table->date('due_date');
             $table->string('assigned_to')->nullable();
             $table->string('key_stakeholders')->nullable();
             $table->string('remarks', 1000)->nullable();

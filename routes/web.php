@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,9 +53,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/activity-tracker-dashboard', function () {
         return Inertia::render('AT/Dashboard');
     })->name('activity-tracker-dashboard');
-    Route::get('/activity-tracker-list', action: function () {
+    Route::get('/activity-tracker-dashboard/activity-tracker-list', function () {
         return Inertia::render('AT/DetailedList');
     })->name('activity-tracker-list');
+    Route::get('/activity-tracker-dashboard/list-of-activities-where-status', function (Request $request) {
+        return Inertia::render('AT/ListByStatus', ['selectedStatus' => $request->status]);
+    })->name('list-of-activities-where-status');
 
     // custom
     Route::post('/add-new-work-items', [ActivityController::class, 'store']);
@@ -63,6 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-count-activities', [ActivityController::class, 'getCountActivities']);
     Route::get('/get-distinct-offices', [UserController::class, 'getDistinctOffices']);
     Route::get('/get-names', [UserController::class, 'getNames']);
+    Route::get('/get-activities-where-status', [ActivityController::class, 'getActivitiesWhereStatus']);
 
     // profile & settings
     Route::get('/profile', function () {

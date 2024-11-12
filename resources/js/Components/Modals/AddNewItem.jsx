@@ -13,7 +13,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
     useEffect(() => {
         axios.get('/get-names')
             .then((response) => {
-                setNames(response.data.map(name => ({ value: name.name, label: name.name })));
+                setNames(response.data.map(user => ({ value: user.id, label: user.name })));
             })
             .catch((error) => {
                 console.error('Error fetching data: ', error);
@@ -71,7 +71,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
         if (isOpen && initialFormData) {
             const processedFormData = {
                 ...initialFormData,
-                assigned_to: typeof initialFormData.assigned_to === 'string' ? initialFormData.assigned_to.split(',').map(name => name.trim()) : initialFormData.assigned_to || []
+                assigned_to: initialFormData.assigned_to ? initialFormData.assigned_to.map(user => user.id) : []
             }
             setFormData(isEditMode ? processedFormData : '');
         }

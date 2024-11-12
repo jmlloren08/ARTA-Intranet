@@ -28,4 +28,9 @@ class Activities extends Model
         'remarks',
         'created_by'
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_activities', 'activity_id', 'user_id');
+    }
 }
