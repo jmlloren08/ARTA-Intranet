@@ -8,6 +8,7 @@ const DropdownUser = () => {
   const user = usePage().props.auth.user;
   const { post } = useForm();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const photoPreview = user.photo_url ? `/storage/${user.photo_url}` : UserOne;
 
   const handleLogout = () => {
     post(route('logout'));
@@ -27,8 +28,8 @@ const DropdownUser = () => {
           <span className="block text-xs">{user.email}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <img src={UserOne} alt="User" />
+        <span className="h-12 w-12 rounded-full h-14 w-14 rounded-full object-containt object-top">
+          <img src={photoPreview} alt="User" className='h-14 w-14 rounded-full object-containt object-top' />
         </span>
 
         <svg

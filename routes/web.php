@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DepartmentAgenciesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,21 +70,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-distinct-offices', [UserController::class, 'getDistinctOffices']);
     Route::get('/get-names', [UserController::class, 'getNames']);
     Route::get('/get-activities-where-status', [ActivityController::class, 'getActivitiesWhereStatus']);
+    Route::get('/get-key-stakeholders', [DepartmentAgenciesController::class, 'getDepartmentAgencies']);
 
     // profile & settings
-    Route::get('/profile', function () {
-        return Inertia::render('Profile');
-    })->name('profile');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile-update-information', [ProfileController::class, 'updateProfileInformation'])->name('profile.update.information');
+    Route::post('/profile-update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
     Route::get('/settings', function () {
         return Inertia::render(component: 'Settings');
     })->name('settings');
 });
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
 
 Route::permanentRedirect('/404', '/register');
 Route::permanentRedirect('/404', '/password/reset');

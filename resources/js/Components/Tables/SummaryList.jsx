@@ -85,7 +85,9 @@ const SummaryList = ({ activities, openEditModal }) => {
                       </div>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-sm">{activityItem.key_stakeholders}</p>
+                      <p className="text-sm">
+                        {Array.isArray(activityItem.key_stakeholders) ? activityItem.key_stakeholders.join(', ') : activityItem.key_stakeholders}
+                      </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-12 dark:border-strokedark">
                       <p className="text-sm">{activityItem.remarks}</p>

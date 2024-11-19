@@ -78,9 +78,7 @@ const ListByStatus = () => {
                   activitiesWhereStatus.map((activityItem, key) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                        <h5 className="font-medium text-black dark:text-white hover:cursor-pointer hover:underline"
-                          onClick={() => openEditModal(activityItem)}
-                        >
+                        <h5 className="font-medium text-black dark:text-white">
                           {activityItem.work_item}
                         </h5>
                       </td>
@@ -109,18 +107,18 @@ const ListByStatus = () => {
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark whitespace-nowrap">
                         <div className="text-sm">
-                          {activityItem.assigned_to && activityItem.assigned_to.split(',').map((assignedTo, index) => (
+                          {activityItem.users && activityItem.users.map((assignedTo, index) => (
                             <p
                               key={index}
                               className='bg-opacity-30 rounded-full bg-black text-white px-2 py-1 mb-1 mr-1'
                             >
-                              {assignedTo.trim()}
+                              {assignedTo.name}
                             </p>
                           ))}
                         </div>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                        <p className="text-sm">{activityItem.key_stakeholders}</p>
+                        <p className="text-sm">{Array.isArray(activityItem.key_stakeholders) ? activityItem.key_stakeholders.join(', ') : activityItem.key_stakeholders}</p>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-12 dark:border-strokedark">
                         <p className="text-sm">{activityItem.remarks}</p>

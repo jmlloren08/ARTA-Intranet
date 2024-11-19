@@ -3,12 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
+import CreatetableSelect from 'react-select/creatable';
 
 const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormData, isEditMode }) => {
 
     const [formData, setFormData] = useState('');
     const [offices, setOffices] = useState([]);
     const [names, setNames] = useState([]);
+    const [departmentAgencies, setDepartmentAgencies] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        axios.get('/get-key-stakeholders')
+            .then((response) => {
+                setDepartmentAgencies(response.data.map(da => ({ value: da.department_name, label: da.department_name })));
+            })
+            .catch((error) => {
+                console.error('Error fetching data: ', error);
+            })
+    }, []);
 
     useEffect(() => {
         axios.get('/get-names')
@@ -42,6 +55,22 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
         setFormData({ ...formData, assigned_to: selectedOptions ? selectedOptions.map((option) => option.value) : [] });
     }
 
+    const handleCreateKeyStakeholder = (inputValue) => {
+        const newOption = { value: inputValue, label: inputValue };
+        setDepartmentAgencies((prevOptions) => [...prevOptions, newOption]);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            key_stakeholders: [...(prevFormData.key_stakeholders || []), inputValue],
+        }));
+    }
+
+    const handleKeyStakeholderChange = (selectedOptions) => {
+        setFormData({
+            ...formData,
+            key_stakeholders: selectedOptions ? selectedOptions.map((option) => option.value) : []
+        });
+    }
+
     const handleClose = () => {
         setFormData('');
         onClose();
@@ -49,6 +78,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             if (isEditMode) {
                 const response = await axios.patch(`/update-work-items/${formData.id}`, formData);
@@ -64,6 +94,8 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
         } catch (error) {
             toast.error(error.response.data.message);
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -71,7 +103,8 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
         if (isOpen && initialFormData) {
             const processedFormData = {
                 ...initialFormData,
-                assigned_to: initialFormData.assigned_to ? initialFormData.assigned_to.map(user => user.id) : []
+                assigned_to: initialFormData.assigned_to ? initialFormData.assigned_to.map(user => user.id) : [],
+                key_stakeholders: initialFormData.key_stakeholders ? initialFormData.key_stakeholders.split(', ') : []
             }
             setFormData(isEditMode ? processedFormData : '');
         }
@@ -196,11 +229,12 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                         </div>
                         <div>
                             <label className='block font-medium'>Key Stakeholders</label>
-                            <input
-                                type="text"
-                                name="key_stakeholders"
-                                value={formData.key_stakeholders || ''}
-                                onChange={handleChange}
+                            <CreatetableSelect
+                                isMulti
+                                options={departmentAgencies}
+                                value={departmentAgencies.filter(option => formData.key_stakeholders?.includes(option.value))}
+                                onChange={handleKeyStakeholderChange}
+                                onCreateOption={handleCreateKeyStakeholder}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
                                 required
                             />
@@ -219,9 +253,10 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                         <div className="flex justify-end space-x-2">
                             <button
                                 type="submit"
-                                className="px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+                                className={`px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 {isEditMode ? 'Update' : 'Save'}
+                                {loading && <span className="ml-2">Please wait...</span>}
                             </button>
                             <button
                                 type="button"
