@@ -120,12 +120,12 @@ class ActivityController extends Controller
             $user = auth()->user();
 
             $user->user_role === 'Administrator' ?
-                $activities = Activities::with('users:id,name')
+                $activities = Activities::with('users:id,name,photo_url')
                 ->select('id', 'work_item', 'description', 'category', 'progress', 'complexity', 'start_date', 'due_date', 'assigned_to', 'key_stakeholders', 'remarks')
                 ->orderBy('updated_at', 'desc')
                 ->get()
                 :
-                $activities = Activities::with('users:id,name')
+                $activities = Activities::with('users:id,name,photo_url')
                 ->whereHas('users', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -136,7 +136,11 @@ class ActivityController extends Controller
 
             $formattedActivities = $activities->map(function ($activity) {
                 $activity->assigned_to = $activity->users->map(function ($user) {
-                    return ['id' => $user->id, 'name' => $user->name];
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'photo_url' => $user->photo_url
+                    ];
                 });
                 return $activity;
             });

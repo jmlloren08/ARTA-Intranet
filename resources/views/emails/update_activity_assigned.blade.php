@@ -16,7 +16,7 @@
 
         <p style="font-size: 16px; color: #1f2937;">Hi {{ $user->name }},</p>
 
-        <p style="font-size: 16px; color: #1f2937;">The following activity has been updated by {{ $updatedBy->name }}:</p>
+        <p style="font-size: 16px; color: #1f2937;">The following activity has been updated by {{ $user->name === $updatedBy->name ? '(YOU)' : $updatedBy->name }}:</p>
 
         <ul style="list-style-type: none; padding: 0;">
             <li style="font-size: 16px; color: #374151; margin-bottom: 8px;">
@@ -32,7 +32,7 @@
                 <strong>Action taken and notes:</strong> {{ $activitiesData->remarks }}
             </li>
             <li style="font-size: 16px; color: #374151; margin-bottom: 8px;">
-                <strong>Action Taken by:</strong> {{ $updatedBy->name }}
+                <strong>Action Taken by:</strong> {{ $user->name === $updatedBy->name ? '(YOU)' : $updatedBy->name }}
             </li>
         </ul>
         <!-- Action Button -->

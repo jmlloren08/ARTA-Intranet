@@ -114,8 +114,8 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
 
     return (
         <>
-            <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto'>
-                <div className='relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh]'>
+            <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+                <div className={`relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh] transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0 scale-100' : '-translate-y-10 scale-95'}`}>
                     <button
                         onClick={handleClose}
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
