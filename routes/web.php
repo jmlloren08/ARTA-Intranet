@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DepartmentAgenciesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Notifications\NewActivitySystemNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -72,12 +75,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-activities-where-status', [ActivityController::class, 'getActivitiesWhereStatus']);
     Route::get('/get-key-stakeholders', [DepartmentAgenciesController::class, 'getDepartmentAgencies']);
 
+    // notifications
+    Route::get('/get-notifications', [NotificationController::class, 'getNotifications']);
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markNotificationAsRead']);
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+
     // profile & settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile-update-information', [ProfileController::class, 'updateProfileInformation'])->name('profile.update.information');
     Route::post('/profile-update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     Route::get('/settings', function () {
         return Inertia::render(component: 'Settings');
     })->name('settings');

@@ -29,7 +29,7 @@
                 <strong>Status:</strong> {{ $activitiesData->progress }}
             </li>
             <li style="font-size: 16px; color: #374151; margin-bottom: 8px;">
-                <strong>Action taken and notes:</strong> {{ $activitiesData->remarks }}
+                <strong>Action items and notes:</strong> {{ $activitiesData->remarks }}
             </li>
             <li style="font-size: 16px; color: #374151; margin-bottom: 8px;">
                 <strong>Action Taken by:</strong> {{ $user->name === $updatedBy->name ? '(YOU)' : $updatedBy->name }}

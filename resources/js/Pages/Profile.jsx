@@ -1,4 +1,4 @@
-import DefaultLayout from '@/layout/DefaultLayout';
+import DefaultLayout from '../layout/DefaultLayout';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import UserOne from '../images/user/user-01.png';
 import { Head, useForm, usePage } from '@inertiajs/react';
@@ -85,7 +85,7 @@ const Profile = () => {
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">
                       <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        className="mb-3 block text-sm font-medium"
                         htmlFor="name"
                       >
                         Full Name
@@ -111,7 +111,7 @@ const Profile = () => {
                     </div>
                     <div className="w-full sm:w-1/2">
                       <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        className="mb-3 block text-sm font-medium"
                         htmlFor="phone_number"
                       >
                         Phone Number
@@ -138,7 +138,7 @@ const Profile = () => {
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full sm:w-1/2">
                       <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        className="mb-3 block text-sm font-medium"
                         htmlFor="office"
                       >
                         Office
@@ -163,7 +163,7 @@ const Profile = () => {
                     </div>
                     <div className="w-full sm:w-1/2">
                       <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        className="mb-3 block text-sm font-medium"
                         htmlFor="title"
                       >
                         Title
@@ -189,7 +189,7 @@ const Profile = () => {
                   </div>
                   <div className="mb-5.5">
                     <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      className="mb-3 block text-sm font-medium"
                       htmlFor="email"
                     >
                       Email Address
@@ -214,7 +214,7 @@ const Profile = () => {
                   </div>
                   <div className="mb-5.5">
                     <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      className="mb-3 block text-sm font-medium"
                       htmlFor="username"
                     >
                       Username
@@ -239,7 +239,7 @@ const Profile = () => {
                   </div>
                   <div className="mb-5.5">
                     <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      className="mb-3 block text-sm font-medium"
                       htmlFor="bio"
                     >
                       BIO
@@ -322,7 +322,7 @@ const Profile = () => {
                       <img src={photoPreview} alt="User" className='h-14 w-14 rounded-full object-containt object-top' />
                     </div>
                     <div>
-                      <span className="mb-1.5 text-black dark:text-white">
+                      <span className="mb-1.5">
                         Edit your photo
                       </span>
                     </div>

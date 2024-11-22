@@ -1,4 +1,4 @@
-import Loader from '@/common/Loader';
+import Loader from '../../common/Loader/index';
 import React, { useEffect, useState } from 'react';
 
 const SummaryList = ({ activities, openEditModal }) => {
@@ -77,7 +77,7 @@ const SummaryList = ({ activities, openEditModal }) => {
                         {activityItem.assigned_to && activityItem.assigned_to.map((assignedTo, index) => (
                           <p
                             key={index}
-                            className='bg-opacity-30 rounded-full bg-black text-white px-2 py-1 mb-1 mr-1'
+                            className='bg-opacity-30 rounded-full bg-black dark:bg-dark px-2 py-1 mb-1 mr-1'
                           >
                             {assignedTo.name}
                           </p>

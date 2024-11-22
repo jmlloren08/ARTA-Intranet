@@ -115,7 +115,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
     return (
         <>
             <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-                <div className={`relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh] transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0 scale-100' : '-translate-y-10 scale-95'}`}>
+                <div className={`relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh] dark:border-strokedark dark:bg-boxdark transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0 scale-100' : '-translate-y-10 scale-95'}`}>
                     <button
                         onClick={handleClose}
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
@@ -132,7 +132,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 name="work_item"
                                 value={formData.work_item || ''}
                                 onChange={handleChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                 required
                             />
                         </div>
@@ -143,7 +143,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 rows="3"
                                 value={formData.description || ''}
                                 onChange={handleChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                 required
                             />
                         </div>
@@ -155,7 +155,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                         options={offices}
                                         value={offices.filter(option => option.value === formData.category)}
                                         onChange={handleCategoryChange}
-                                        className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                        className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
                                         required
                                     />
                                 </div>
@@ -166,7 +166,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                     name="progress"
                                     value={formData.progress || ''}
                                     onChange={handleChange}
-                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                     required
                                 >
                                     <option value="">Select Status</option>
@@ -183,7 +183,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 name="complexity"
                                 value={formData.complexity || ''}
                                 onChange={handleChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                 required
                             >
                                 <option value="">Select Complexity</option>
@@ -200,7 +200,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                     name="start_date"
                                     value={formData.start_date || ''}
                                     onChange={handleChange}
-                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                     required
                                 />
                             </div>
@@ -211,7 +211,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                     name="due_date"
                                     value={formData.due_date || ''}
                                     onChange={handleChange}
-                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                     required
                                 />
                             </div>
@@ -223,7 +223,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 options={names}
                                 value={names.filter(option => formData.assigned_to?.includes(option.value))}
                                 onChange={handleAssignedToChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
                                 required
                             />
                         </div>
@@ -235,7 +235,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 value={departmentAgencies.filter(option => formData.key_stakeholders?.includes(option.value))}
                                 onChange={handleKeyStakeholderChange}
                                 onCreateOption={handleCreateKeyStakeholder}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
                                 required
                             />
                         </div>
@@ -246,7 +246,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 rows="3"
                                 value={formData.remarks || ''}
                                 onChange={handleChange}
-                                className="w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300"
+                                className="w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4"
                                 required
                             />
                         </div>
@@ -255,8 +255,15 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 type="submit"
                                 className={`px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
-                                {isEditMode ? 'Update' : 'Save'}
-                                {loading && <span className="ml-2">Please wait...</span>}
+                                {loading ? (
+                                    <span className='flex items-center'>
+                                        <svg aria-hidden="true" role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"></path>
+                                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"></path>
+                                        </svg>
+                                        Please wait...
+                                    </span>
+                                ) : isEditMode ? 'Update' : 'Save'}
                             </button>
                             <button
                                 type="button"

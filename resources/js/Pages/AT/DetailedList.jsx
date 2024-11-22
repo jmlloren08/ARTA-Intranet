@@ -107,7 +107,7 @@ const DetailedList = () => {
                             <select
                                 onChange={(e) => setView(e.target.value)}
                                 value={view}
-                                className='appearance-none w-full py-2 px-4 hover:cursor-pointer hover:bg-bodydark hover:text-white dark:text-white dark:bg-bodydark transition duration-300 ease-in-out rounded-full'
+                                className='appearance-none w-full py-2 px-4 hover:cursor-pointer hover:bg-bodydark hover:text-white dark:hover:bg-dark dark:bg-meta-4 transition duration-300 ease-in-out rounded-full'
                             >
                                 <option value="Board" className="text-body dark:text-white">Board</option>
                                 <option value="Table" className="text-body dark:text-white">Table</option>
@@ -130,7 +130,7 @@ const DetailedList = () => {
                     <input
                         type='text'
                         placeholder='Search activities...'
-                        className='p-2 w-full'
+                        className='p-2 w-full dark:border-strokedark dark:bg-boxdark'
                         value={searchTerm}
                         onChange={handleSearch}
                     />

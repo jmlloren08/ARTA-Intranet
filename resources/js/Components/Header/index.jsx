@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import DropdownUser from './DropdownUser';
 import LogoIcon from '../../images/logo/logo-icon.svg';
 import DarkModeSwitcher from './DarkModeSwitcher';
+import DropdownNotification from './DropdownNotification';
 
 const Header = (props) => {
   return (
@@ -60,13 +61,10 @@ const Header = (props) => {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {/* <!-- Dark Mode Toggler --> */}
             <DarkModeSwitcher />
-            {/* <!-- Dark Mode Toggler --> */}
+            <DropdownNotification />
           </ul>
-          {/* <!-- User Area --> */}
           <DropdownUser />
-          {/* <!-- User Area --> */}
         </div>
       </div>
     </header >

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewActivityNotification;
 use App\Mail\UpdateActivityNotification;
+use App\Notifications\SystemNotification;
 use App\Models\Activities;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class ActivityController extends Controller
@@ -52,9 +54,13 @@ class ActivityController extends Controller
 
             // send email notification to each assigned user
             foreach ($validatedData['assigned_to'] as $user_id) {
-                $user = User::find($user_id); // Assuming the user model is correctly set up
+                $user = User::find($user_id);
                 Mail::to($user->email)->send(new NewActivityNotification($activity, $user));
             }
+
+            // send system notification to each assigned user
+            $usersToNotify = User::whereIn('id', $validatedData['assigned_to'])->get();
+            Notification::send($usersToNotify, new SystemNotification($activity, 'new'));
 
             return response()->json(['message' => 'Work item added successfully.']);
         } catch (\Exception $e) {
@@ -105,6 +111,10 @@ class ActivityController extends Controller
             foreach ($activitiesData->users as $user) {
                 Mail::to($user->email)->send(new UpdateActivityNotification($activitiesData, $updatedBy, $user));
             }
+
+            // send system notifications to assigned users
+            $usersToNotify = User::whereIn('id', $validatedData['assigned_to'])->get();
+            Notification::send($usersToNotify, new SystemNotification($activitiesData, 'update'));
 
             return response()->json(['message' => 'Work item updated successfully.']);
         } catch (\Exception $e) {

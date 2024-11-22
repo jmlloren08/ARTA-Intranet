@@ -1,4 +1,5 @@
-import React from 'react';
+import Loader from '../../common/Loader/index';
+import React, { useEffect, useState } from 'react';
 
 const KanbanBoard = ({ activities, openEditModal }) => {
 
@@ -12,8 +13,18 @@ const KanbanBoard = ({ activities, openEditModal }) => {
         return `${firstInitial}${secondInitial}`;
     }
 
-    return (
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 p-4'>
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (activities && activities.length > 0) {
+            setLoading(false);
+        }
+    }, [activities]);
+
+    return loading ? (
+        <Loader />
+    ) : (
+        <div className='rounded-sm grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 p-4 dark:border-strokedark dark:bg-boxdark'>
             {statuses.map((status) => (
                 <div key={status} className='flex flex-col space-y-4 p-4'>
                     <h3 className={`px-4 py-2 text-sm font-semibold text-gray-700 rounded-xl text-white
@@ -26,7 +37,7 @@ const KanbanBoard = ({ activities, openEditModal }) => {
                             <div
                                 key={index}
                                 onClick={() => openEditModal(activity)}
-                                className='p-4 bg-white rounded shadow cursor-pointer hover:shadow-xl transition duration-300 ease-in-out'
+                                className='p-4 bg-white rounded shadow cursor-pointer hover:shadow-xl transition duration-300 ease-in-out dark:bg-meta-4'
                             >
                                 <h5 className='font-medium text-gray-800'>{activity.work_item}</h5>
                                 <p className={`mt-1 text-sm text-gray-500 rounded-full px-2 bg-opacity-10 ${activity.complexity === 'Simple' ? 'border border-secondary bg-secondary text-secondary' : activity.complexity === 'Complex' ? 'border border-warning bg-warning text-warning' : 'border border-danger bg-danger text-danger'}`}>{activity.complexity}</p>
@@ -41,10 +52,10 @@ const KanbanBoard = ({ activities, openEditModal }) => {
                                                 <img
                                                     src={`/storage/${assignedTo.photo_url}`}
                                                     alt={assignedTo.name}
-                                                    className="w-8 h-8 rounded-full object-cover mr-1"
+                                                    className="w-8 h-8 rounded-full object-cover mr-1 mt-1"
                                                 />
                                             ) : (
-                                                <div className='w-8 h-8 rounded-full bg-bodydark flex items-center justify-center text-black mr-1 mt-1'>
+                                                <div className='w-8 h-8 rounded-full bg-warning bg-opacity-30 text-warning flex items-center justify-center text-black mr-1 mt-1'>
                                                     {getInitials(assignedTo.name)}
                                                 </div>
                                             )}
@@ -54,6 +65,7 @@ const KanbanBoard = ({ activities, openEditModal }) => {
                                         </div>
                                     ))}
                                 </div>
+                                <p className='mt-1 text-sm text-gray-500'>{activity.key_stakeholders}</p>
                             </div>
                         ))}
                     </div>
