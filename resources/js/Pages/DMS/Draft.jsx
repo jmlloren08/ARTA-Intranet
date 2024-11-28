@@ -11,7 +11,7 @@ const Draft = () => {
       </div>
     </>
   );
-};
+}
 
 Draft.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
 

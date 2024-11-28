@@ -71,6 +71,7 @@ const UpdatePasswordForm = ({ className = '' }) => {
                             type="password"
                             className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             autoComplete="current-password"
+                            required
                         />
                         <InputError message={errors.current_password} className="mt-2" />
                     </div>
@@ -96,6 +97,7 @@ const UpdatePasswordForm = ({ className = '' }) => {
                             type="password"
                             className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             autoComplete="new-password"
+                            required
                         />
                         <InputError message={errors.password} className="mt-2" />
                     </div>
@@ -120,6 +122,7 @@ const UpdatePasswordForm = ({ className = '' }) => {
                             type="password"
                             className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             autoComplete="password-confirmation"
+                            required
                         />
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>

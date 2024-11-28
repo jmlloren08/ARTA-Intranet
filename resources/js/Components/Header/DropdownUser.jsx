@@ -25,7 +25,7 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">{user.name}</span>
-          <span className="block text-xs">{user.email}</span>
+          <span className="block text-xs">{user.title}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full h-14 w-14 rounded-full object-containt object-top">

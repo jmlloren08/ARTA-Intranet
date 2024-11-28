@@ -2,17 +2,17 @@ import React from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../Components/Breadcrumbs/Breadcrumb';
 
-const Expired = () => {
+const Approved = () => {
   return (
     <>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Expired" />
+        <Breadcrumb pageName="Approved" />
         <p>This page is currently under development.</p>
       </div>
     </>
   );
 };
 
-Expired.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
+Approved.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
 
-export default Expired;
+export default Approved;

@@ -30,7 +30,7 @@ export default function Login({ status, canResetPassword }) {
                                 Welcome to ARTA Intranet!
                             </h2>
                             <p className="text-gray-600 mb-10">
-                                A one-stop-shop platform to streamline document management, operations, and activity tracking.
+                                A one-stop-shop platform to streamline operations, activity tracking, and document management.
                             </p>
                             <span className="mt-15 inline-block">
                                 <LoginLogo />

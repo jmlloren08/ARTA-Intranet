@@ -93,7 +93,7 @@ const ActivityTracker = () => {
       </div>
     </>
   );
-};
+}
 
 ActivityTracker.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
 

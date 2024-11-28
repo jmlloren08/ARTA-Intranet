@@ -253,6 +253,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                         <div className="flex justify-end space-x-2">
                             <button
                                 type="submit"
+                                disabled={loading}
                                 className={`px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 {loading ? (
