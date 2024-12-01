@@ -27,7 +27,7 @@ const ListByStatus = () => {
 
   return (
     <>
-      <div className="mx-auto max-w-270">
+      <div className="mx-auto max-w-full">
         <Head title="List By Status" />
         <Breadcrumb pageName={selectedStatus} />
         <div className='flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 mb-12 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between'>

@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import html2canvas from 'html2canvas';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../Components/Breadcrumbs/Breadcrumb';
 import { Head } from '@inertiajs/react';
@@ -40,6 +41,35 @@ const Calendar = () => {
         setIsModalOpen(false);
     };
 
+    const handleDownloadCalendar = () => {
+
+        const calendarElement = document.querySelector('.fc');
+        const toolbar = document.querySelector('.fc-toolbar');
+        const title = document.querySelector('.fc-toolbar-title');
+
+        const tempTitle = document.createElement('div');
+        tempTitle.textContent = title.textContent;
+        tempTitle.style.textAlign = 'center';
+        tempTitle.style.fontSize = '1.5rem';
+        tempTitle.style.marginBottom = '1rem';
+        tempTitle.style.fontWeight = 'bold';
+        calendarElement.prepend(tempTitle);
+
+        if (toolbar) toolbar.style.display = "none";
+
+        html2canvas(calendarElement, { useCors: true }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'calendar-of-activities.png';
+            link.click();
+
+            tempTitle.remove();
+            if (toolbar) toolbar.style.display = "flex";
+        });
+
+    }
+
     useEffect(() => {
         fetchActivities();
     }, []);
@@ -60,6 +90,19 @@ const Calendar = () => {
             <Head title="Calendar of Activities" />
             <div className="mx-auto max-w-full">
                 <Breadcrumb pageName="Calendar of Activities" />
+                <div className='flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 mb-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between'>
+                    <div className='flex flex-col items-start sm:items-center'>
+                        <button
+                            onClick={handleDownloadCalendar}
+                            className='flex items-center gap-2 rounded bg-primary py-2 px-4.5 font-medium text-white hover:bg-opacity-90'
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                            </svg>
+                            Download Calendar
+                        </button>
+                    </div>
+                </div>
                 <div className="flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 mb-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
                     <div className="p-4 flex flex-col w-full">
                         <FullCalendar
@@ -76,14 +119,18 @@ const Calendar = () => {
                             editable={true}
                             selectMirror={true}
                             dayMaxEvents={false}
+                            eventContent={(info) => (
+                                <div className={`whitespace-normal break-words px-1 text-left ${info.event.extendedProps.complexity === 'Simple' ? 'bg-primary bg-opacity-10 border border-primary text-primary' : info.event.extendedProps.complexity === 'Complex' ? 'bg-warning bg-opacity-10 border border-warning text-warning' : 'bg-danger bg-opacity-10 border border-danger text-danger'}`}>
+                                    {info.event.title}
+                                </div>
+                            )}
                         />
                         {isModalOpen && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                 <div className="bg-white p-6 w-full max-w-lg bg-white shadow-lg overflow-y-auto max-h-[75vh]">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <h2 className="text-lg font-semibold mb-4">{selectedEvent.work_item}</h2>
+                                    <div className="flex justify-end mb-4">
                                         <button
-                                            className="text-gray-600 hover:text-gray-800 text-lg"
+                                            className="ml-12 focus:outline-none text-gray-600 hover:text-gray-800 text-lg"
                                             onClick={closeModal}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,6 +139,9 @@ const Calendar = () => {
                                         </button>
                                     </div>
                                     <div className="space-y-4">
+                                        <div>
+                                            <h2 className="text-lg font-semibold mb-4">{selectedEvent.work_item}</h2>
+                                        </div>
                                         <div>
                                             <p className="font-medium text-gray-700 mb-1">DESCRIPTION</p>
                                             <p className="text-gray-600">{selectedEvent.description}</p>
@@ -169,14 +219,7 @@ const Calendar = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button
-                                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 z-30"
-                                    onClick={closeModal}
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
+
                             </div>
                         )}
                     </div>
