@@ -17,7 +17,7 @@ const ListByStatus = () => {
         });
         setActivitiesWhereStatus(response.data);
       } catch (error) {
-        console.error('Error fetching data: ', error);
+        console.error(error.response.data.message);
       }
     }
     if (selectedStatus) {

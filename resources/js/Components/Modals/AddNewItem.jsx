@@ -19,7 +19,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                 setDepartmentAgencies(response.data.map(da => ({ value: da.department_name, label: da.department_name })));
             })
             .catch((error) => {
-                console.error('Error fetching data: ', error);
+                console.error(error.response.data.message);
             })
     }, []);
 
@@ -29,7 +29,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                 setNames(response.data.map(user => ({ value: user.id, label: user.name })));
             })
             .catch((error) => {
-                console.error('Error fetching data: ', error);
+                console.error(error.response.data.message);
             })
     }, []);
 
@@ -39,7 +39,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                 setOffices(response.data.map(office => ({ value: office.office, label: office.office })));
             })
             .catch((error) => {
-                console.error('Error fetching data: ', error);
+                console.error(error.response.data.message);
             })
     }, []);
 

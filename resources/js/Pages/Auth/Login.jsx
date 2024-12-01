@@ -1,9 +1,10 @@
 import React from 'react';
 import InputError from '@/Components/InputError';
-import { Head, Link, useForm } from '@inertiajs/react';
-import LoginLogo from '@/Components/LoginLogo';
+import { Head, useForm } from '@inertiajs/react';
+import LoginLogo from '@/Components/Logos/LoginLogo';
+import ApplicationLogo from '@/Components/Logos/ApplicationLogo';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login({ status }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -40,6 +41,9 @@ export default function Login({ status, canResetPassword }) {
                     {/* right side */}
                     <div className="w-full xl:w-1/2 flex justify-center items-center p-10">
                         <div className="w-full max-w-md">
+                            <div className='mb-6 flex justify-center'>
+                                <ApplicationLogo />
+                            </div>
                             <h2 className="text-2xl font-semibold text-center mb-8 text-black dark:text-white">
                                 Sign In to ARTA Intranet
                             </h2>

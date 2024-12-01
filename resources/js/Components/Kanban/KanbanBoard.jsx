@@ -59,9 +59,6 @@ const KanbanBoard = ({ activities, openEditModal }) => {
                                                     {getInitials(assignedTo.name)}
                                                 </div>
                                             )}
-                                            {/* <p className='bg-opacity-30 rounded-full text-black px-2 py-1'>
-                                            {getInitials(assignedTo.name)}
-                                            </p> */}
                                         </div>
                                     ))}
                                 </div>

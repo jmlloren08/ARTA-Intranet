@@ -64,6 +64,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/activity-tracker-dashboard/list-of-activities-where-status', function (Request $request) {
         return Inertia::render('AT/ListByStatus', ['selectedStatus' => $request->status]);
     })->name('list-of-activities-where-status');
+    Route::get('/activity-tracker-dashboard/calendar-of-activities', function () {
+        return Inertia::render('AT/Calendar');
+    })->name('calendar-of-activities');
 
     // custom
     Route::post('/add-new-work-items', [ActivityController::class, 'store']);

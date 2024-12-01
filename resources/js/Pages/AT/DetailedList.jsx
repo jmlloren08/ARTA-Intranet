@@ -60,7 +60,7 @@ const DetailedList = () => {
             setActivities(filteredActivities);
 
         } catch (error) {
-            console.error('Error fetching data: ', error);
+            console.error(error.response.data.message);
         }
     }
 
@@ -80,7 +80,7 @@ const DetailedList = () => {
         <>
             <Head title="Activity Tracker/List" />
             <ToastContainer />
-            <div className="mx-auto max-w-270">
+            <div className="mx-auto max-w-full">
                 <Breadcrumb pageName="List" />
                 <div className='flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 mb-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between'>
                     <div className='flex flex-col items-start sm:items-center'>
@@ -91,7 +91,7 @@ const DetailedList = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
-                            Add new item
+                            Add New Item
                         </button>
                         <AddNewItem
                             isOpen={isModalOpen}
@@ -126,11 +126,27 @@ const DetailedList = () => {
                         </button>
                     ))}
                 </div>
-                <div className="flex items-center m-2">
+                <div className="flex items-center m-2 bg-white dark:border-strokedark dark:bg-boxdark focus-within:border-primary focus-within:ring-2 focus-within:ring-primary">
+                    <span className="p-2">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="w-5 h-5 text-gray-500"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
+                            />
+                        </svg>
+                    </span>
                     <input
                         type='text'
                         placeholder='Search activities...'
-                        className='p-2 w-full dark:border-strokedark dark:bg-boxdark'
+                        className='p-2 w-full focus:outline-none dark:border-strokedark dark:bg-boxdark'
                         value={searchTerm}
                         onChange={handleSearch}
                     />

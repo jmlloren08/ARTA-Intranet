@@ -1,5 +1,5 @@
 import InputError from '@/Components/InputError';
-import LoginLogo from '@/Components/LoginLogo';
+import LoginLogo from '@/Components/Logos/LoginLogo';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
