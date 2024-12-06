@@ -11,9 +11,9 @@ class DepartmentAgenciesController extends Controller
     {
         try {
 
-            $department_names = DepartmentAgencies::select('department_name')->get();
+            $department_agencies = DepartmentAgencies::select('department_agencies')->get();
 
-            return response()->json($department_names);
+            return response()->json($department_agencies);
         } catch (\Exception $e) {
 
             Log::error("Error fetching data: " . $e->getMessage());

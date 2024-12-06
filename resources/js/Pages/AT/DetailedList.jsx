@@ -60,7 +60,7 @@ const DetailedList = () => {
             setActivities(filteredActivities);
 
         } catch (error) {
-            console.error(error.response.data.message);
+            console.error(error.response?.data?.message || 'Error fetching data');
         }
     }
 
@@ -93,14 +93,6 @@ const DetailedList = () => {
                             </svg>
                             Add New Item
                         </button>
-                        <AddNewItem
-                            isOpen={isModalOpen}
-                            onClose={() => setIsModalOpen(false)}
-                            onAddSuccess={handleAddSuccess}
-                            onEditSuccess={handleEditSuccess}
-                            initialFormData={editItem}
-                            isEditMode={Boolean(editItem)}
-                        />
                     </div>
                     <div className='flex space-x-2'>
                         <div className="relative inline-block">
@@ -157,6 +149,16 @@ const DetailedList = () => {
                     <SummaryList activities={activities.filter(activity => activity.work_item.toLowerCase().includes(searchTerm.toLowerCase()))} openEditModal={openEditModal} />
                 )}
             </div >
+            {isModalOpen && (
+                <AddNewItem
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onAddSuccess={handleAddSuccess}
+                    onEditSuccess={handleEditSuccess}
+                    initialFormData={editItem}
+                    isEditMode={Boolean(editItem)}
+                />
+            )}
         </>
     );
 }

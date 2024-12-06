@@ -16,10 +16,10 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
     useEffect(() => {
         axios.get('/get-key-stakeholders')
             .then((response) => {
-                setDepartmentAgencies(response.data.map(da => ({ value: da.department_name, label: da.department_name })));
+                setDepartmentAgencies(response.data.map(da => ({ value: da.department_agencies, label: da.department_agencies })));
             })
             .catch((error) => {
-                console.error(error.response.data.message);
+                console.error(error.response?.data?.message || 'Error fetching data');
             })
     }, []);
 
@@ -29,7 +29,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                 setNames(response.data.map(user => ({ value: user.id, label: user.name })));
             })
             .catch((error) => {
-                console.error(error.response.data.message);
+                console.error(error.response?.data?.message || 'Error fetching data');
             })
     }, []);
 
@@ -39,7 +39,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                 setOffices(response.data.map(office => ({ value: office.office, label: office.office })));
             })
             .catch((error) => {
-                console.error(error.response.data.message);
+                console.error(error.response?.data?.message || 'Error fetching data');
             })
     }, []);
 
@@ -92,8 +92,8 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
             setFormData('');
             onClose();
         } catch (error) {
-            toast.error(error.response.data.message);
-            console.error(error);
+            toast.error(error.response?.data?.message || 'Error fetching data');
+            console.error(error.response?.data?.message || 'Error fetching data');
         } finally {
             setLoading(false);
         }
@@ -114,16 +114,10 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
 
     return (
         <>
-            <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+            <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transform transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
                 <div className={`relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh] dark:border-strokedark dark:bg-boxdark transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0 scale-100' : '-translate-y-10 scale-95'}`}>
-                    <button
-                        onClick={handleClose}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
-                    >
-                        &times;
-                    </button>
                     <h2 className='text-2xl font-semibold mb-4'>{isEditMode ? 'Update Work Item' : 'Add New Work Item'}</h2>
-                    <form onSubmit={handleModalSubmit} className='space-y-4'>
+                    <form onSubmit={handleModalSubmit}>
                         <input type='hidden' name='id' value={formData.id || ''} readOnly />
                         <div>
                             <label className='block font-medium'>Work Item</label>
@@ -252,6 +246,14 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                         </div>
                         <div className="flex justify-end space-x-2">
                             <button
+                                type="button"
+                                onClick={handleClose}
+                                className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                                required
+                            >
+                                Cancel
+                            </button>
+                            <button
                                 type="submit"
                                 disabled={loading}
                                 className={`px-4 py-2 rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -265,14 +267,6 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                         Please wait...
                                     </span>
                                 ) : isEditMode ? 'Update' : 'Save'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleClose}
-                                className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
-                                required
-                            >
-                                Cancel
                             </button>
                         </div>
                     </form>
