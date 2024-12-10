@@ -112,6 +112,7 @@ class GoogleController extends Controller
     private function getGoogleClient()
     {
         try {
+            $filePath = storage_path('client_secret.json');
 
             $client = new Client();
             $client->setAuthConfig($filePath);
