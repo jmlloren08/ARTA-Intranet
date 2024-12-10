@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DepartmentAgenciesController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Notifications\NewActivitySystemNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,15 +25,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/document-new', function () {
         return Inertia::render(component: 'DMS/Document/NewDocument');
     })->name('document-new');
-    Route::get('/document-my', function () {
+    Route::get('/my-documents', function () {
         return Inertia::render(component: 'DMS/Document/MyDocuments');
-    })->name('document-my');
-    Route::get('/document-all', function () {
+    })->name('my-documents');
+    Route::get('/all-documents', function () {
         return Inertia::render(component: 'DMS/Document/AllDocuments');
-    })->name('document-all');
-    Route::get('/document-templates', function () {
+    })->name('all-documents');
+    Route::get('/documents-templates', function () {
         return Inertia::render(component: 'DMS/Document/Templates');
-    })->name('document-templates');
+    })->name('documents-templates');
     Route::get('/document-in-progress', function () {
         return Inertia::render(component: 'DMS/Workflow/InProgress');
     })->name('document-in-progress');
@@ -108,6 +107,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/google/auth', [GoogleController::class, 'authenticate'])->name('google.auth');
     Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
     Route::post('/google/docs/create', [GoogleController::class, 'createDocument'])->name('google.docs.create');
+    Route::patch('/google/docs/update-document-title/{document_id}', [GoogleController::class, 'updateDocumentTitle'])->name('google.docs.update');
+    Route::get('/list-my-documents', [DocumentController::class, 'getMyDocuments']);
+    Route::get('/list-all-documents', [DocumentController::class, 'getAllDocuments']);
+    Route::get('/list-in-progress-documents', [DocumentController::class, 'getInProgressDocuments']);
+    Route::post('/create-new-document', [DocumentController::class, 'store']);
+    Route::put('/update-document/{id}', [DocumentController::class, 'update']);
+    Route::patch('/update-document-metadata/{id}', [DocumentController::class, 'updateDocumentMetadata']);
 
     // profile & settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

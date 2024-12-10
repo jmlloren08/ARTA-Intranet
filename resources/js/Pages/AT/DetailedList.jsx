@@ -40,6 +40,14 @@ const DetailedList = () => {
         setIsModalOpen(true);
     }
 
+    const handleAddSuccess = () => {
+        setRefresh(prev => !prev);
+    }
+
+    const handleEditSuccess = () => {
+        setRefresh(prev => !prev);
+    }
+
     const fetchActivities = async () => {
         try {
             const response = await axios.get('/get-all-activities');
@@ -64,14 +72,6 @@ const DetailedList = () => {
         }
     }
 
-    const handleAddSuccess = () => {
-        setRefresh(prev => !prev);
-    }
-
-    const handleEditSuccess = () => {
-        setRefresh(prev => !prev);
-    }
-
     useEffect(() => {
         fetchActivities();
     }, [refresh, activeTab]);
@@ -91,7 +91,7 @@ const DetailedList = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
-                            Add New Item
+                            Add New Work Item
                         </button>
                     </div>
                     <div className='flex space-x-2'>
@@ -112,7 +112,7 @@ const DetailedList = () => {
                         <button
                             key={index}
                             onClick={() => setActiveTab(status)}
-                            className={`py-2 px-4 md:px-6 lg:px-8 font-semibold focus:outline-none text-xs md:text-base ${activeTab === status ? 'border-b-2 border-primary text-primary' : 'text-gray-600 hover:text-primary'}`}
+                            className={`py-2 px-4 md:px-6 lg:px-8 font-semibold focus:outline-none text-xs md:text-base hover:bg-primary hover:text-white transition duration-300 ease-in-out ${activeTab === status ? 'border-b-2 border-primary bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
                         >
                             {status} ({counts[status === 'In progress' ? 'inProgress' : status === 'Not started' ? 'notStarted' : status.toLowerCase()] || 0})
                         </button>

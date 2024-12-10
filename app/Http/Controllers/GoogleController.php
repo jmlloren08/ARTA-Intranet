@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Google\Client;
 use Google\Service\Drive;
 use Google\Service\Docs;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class GoogleController extends Controller
@@ -30,16 +31,18 @@ class GoogleController extends Controller
             session(['google_token' => $accessToken]);
             session(['google_refresh_token' => $client->getRefreshToken()]);
 
-            return redirect()->route('document-new');
+            return redirect()->route('my-documents');
         } catch (\Exception $e) {
 
             Log::error("Error calling callback: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
-    public function createDocument()
+    public function createDocument(Request $request)
     {
         try {
+
+            $title = $request->title;
             $client = $this->getGoogleClient();
 
             if (!$client->getAccessToken()) {
@@ -48,11 +51,11 @@ class GoogleController extends Controller
 
             $docsService = new Docs($client);
             $document = new \Google\Service\Docs\Document([
-                'title' => 'New Document'
+                'title' => $title
             ]);
 
             $createdDocument = $docsService->documents->create($document);
-            $docId = $createdDocument->getDocumentId();
+            $document_id = $createdDocument->getDocumentId();
 
             $driveService = new Drive($client);
             // dms/operations
@@ -61,7 +64,7 @@ class GoogleController extends Controller
             $fileMetaData = new \Google\Service\Drive\DriveFile();
 
             $driveService->files->update(
-                $docId,
+                $document_id,
                 $fileMetaData,
                 [
                     'addParents' => $folderId,
@@ -69,15 +72,40 @@ class GoogleController extends Controller
                 ]
             );
 
-            $docUrl = "https://docs.google.com/document/d/$docId";
+            $document_url = "https://docs.google.com/document/d/$document_id";
 
             return response()->json([
-                'docUrl' => $docUrl,
-                'docId' => $docId
+                'document_url' => $document_url,
+                'document_id' => $document_id
             ]);
         } catch (\Exception $e) {
 
             Log::error("Error creating document: " . $e->getMessage());
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
+    }
+    public function updateDocumentTitle(Request $request, $document_id)
+    {
+        try {
+            $newTitle = $request->title;
+            $client = $this->getGoogleClient();
+
+            if (!$client->getAccessToken()) {
+                return response()->json(['message' => 'User is not authenticated'], 401);
+            }
+
+            $driveService = new Drive($client);
+
+            $fileMetadata = new \Google\Service\Drive\DriveFile([
+                'name' => $newTitle
+            ]);
+
+            $driveService->files->update($document_id, $fileMetadata);
+
+            return response()->json(['message' => 'Document title updated successfully!']);
+        } catch (\Exception $e) {
+
+            Log::error("Error updating document title: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }

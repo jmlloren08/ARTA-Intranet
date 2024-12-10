@@ -3,25 +3,94 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
-import CreatetableSelect from 'react-select/creatable';
+import { usePage } from '@inertiajs/react';
 
-const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormData, isEditMode }) => {
+const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormData, isEditMode }) => {
 
     const [formData, setFormData] = useState('');
     const [offices, setOffices] = useState([]);
     const [names, setNames] = useState([]);
-    const [departmentAgencies, setDepartmentAgencies] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [fileName, setFileName] = useState('');
+    const user = usePage().props.auth.user;
 
-    useEffect(() => {
-        axios.get('/get-key-stakeholders')
-            .then((response) => {
-                setDepartmentAgencies(response.data.map(da => ({ value: da.department_agencies, label: da.department_agencies })));
-            })
-            .catch((error) => {
-                console.error(error.response?.data?.message || 'Error fetching data');
-            })
-    }, []);
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+
+    const handleCategoryChange = (selectedOption) => {
+        setFormData({ ...formData, category: selectedOption ? selectedOption.value : '' });
+    }
+
+    const handleAssignedToChange = (selectedOptions) => {
+        setFormData({ ...formData, assigned_to: selectedOptions ? selectedOptions.map((option) => option.value) : [] });
+    }
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, file });
+            setFileName(file.name);
+        }
+    }
+
+    const handleClose = () => {
+        setFormData('');
+        onClose();
+    }
+
+    const handleUpdateDocumentTitle = async (e) => {
+        try {
+            const response = await axios.patch(`/google/docs/update-document-title/${formData.document_id}`, {
+                title: formData.title
+            });
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Error updating document title');
+        }
+    }
+
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        if (isEditMode) {
+            try {
+                // update document title
+                handleUpdateDocumentTitle();
+                // update metadata
+                const response = await axios.patch(`/update-document-metadata/${formData.id}`, formData);
+                toast.success(response.data.message);
+                onEditSuccess();
+            } catch (error) {
+                toast.error(error.response?.data?.message || 'Error updating metadata');
+            } finally {
+                setLoading(false);
+                setFormData('');
+                onClose();
+            }
+        } else {
+            try {
+                // create metadata
+                const saveResponse = await axios.post('/create-new-document', formData);
+                const savedDocument = saveResponse.data.document;
+                // create google doc
+                const response = await axios.post('/google/docs/create', { title: formData.title });
+                const { document_id, document_url } = response.data;
+                // update document id and url, after metadata is created
+                const response2 = await axios.put(`/update-document/${savedDocument.id}`, {
+                    document_id,
+                    document_url
+                });
+                toast.success(response2.data.message);
+                onAddSuccess();
+            } catch (error) {
+                toast.error(error.response?.data?.message || 'Error creating/updating document');
+            } finally {
+                setLoading(false);
+                setFormData('');
+                onClose();
+            }
+        }
+    }
 
     useEffect(() => {
         axios.get('/get-names')
@@ -43,67 +112,11 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
             })
     }, []);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
-
-    const handleCategoryChange = (selectedOption) => {
-        setFormData({ ...formData, category: selectedOption ? selectedOption.value : '' });
-    }
-
-    const handleAssignedToChange = (selectedOptions) => {
-        setFormData({ ...formData, assigned_to: selectedOptions ? selectedOptions.map((option) => option.value) : [] });
-    }
-
-    const handleCreateKeyStakeholder = (inputValue) => {
-        const newOption = { value: inputValue, label: inputValue };
-        setDepartmentAgencies((prevOptions) => [...prevOptions, newOption]);
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            key_stakeholders: [...(prevFormData.key_stakeholders || []), inputValue],
-        }));
-    }
-
-    const handleKeyStakeholderChange = (selectedOptions) => {
-        setFormData({
-            ...formData,
-            key_stakeholders: selectedOptions ? selectedOptions.map((option) => option.value) : []
-        });
-    }
-
-    const handleClose = () => {
-        setFormData('');
-        onClose();
-    }
-
-    const handleModalSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            if (isEditMode) {
-                const response = await axios.patch(`/update-work-items/${formData.id}`, formData);
-                toast.success(response.data.message);
-                onEditSuccess();
-            } else {
-                const response = await axios.post('/add-new-work-items', formData);
-                toast.success(response.data.message);
-                onAddSuccess();
-            }
-            setFormData('');
-            onClose();
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Error fetching data');
-        } finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
         if (isOpen && initialFormData) {
             const processedFormData = {
                 ...initialFormData,
-                assigned_to: initialFormData.assigned_to ? initialFormData.assigned_to.map(user => user.id) : [],
-                key_stakeholders: initialFormData.key_stakeholders ? initialFormData.key_stakeholders.split(', ') : []
+                assigned_to: initialFormData.assigned_to ? initialFormData.assigned_to.map(user => user.id) : []
             }
             setFormData(isEditMode ? processedFormData : '');
         }
@@ -115,15 +128,15 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
         <>
             <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transform transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
                 <div className={`relative w-full max-w-lg p-6 bg-white shadow-lg overflow-y-auto max-h-[75vh] dark:border-strokedark dark:bg-boxdark transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-y-0 scale-100' : '-translate-y-10 scale-95'}`}>
-                    <h2 className='text-2xl font-semibold mb-4'>{isEditMode ? 'Update Work Item' : 'Add New Work Item'}</h2>
-                    <form onSubmit={handleModalSubmit}>
+                    <h2 className='text-2xl font-semibold mb-4'>{isEditMode ? formData.document_number : 'Create New Document'}</h2>
+                    <form onSubmit={handleModalSubmit} className='space-y-4'>
                         <input type='hidden' name='id' value={formData.id || ''} readOnly />
                         <div>
-                            <label className='block font-medium'>Work Item</label>
+                            <label className='block font-medium'>Title</label>
                             <input
                                 type="text"
-                                name="work_item"
-                                value={formData.work_item || ''}
+                                name="title"
+                                value={formData.title || ''}
                                 onChange={handleChange}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                 required
@@ -133,7 +146,7 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                             <label className='block font-medium'>Description</label>
                             <textarea
                                 name="description"
-                                rows="3"
+                                rows="4"
                                 value={formData.description || ''}
                                 onChange={handleChange}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
@@ -148,54 +161,10 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                         options={offices}
                                         value={offices.filter(option => option.value === formData.category)}
                                         onChange={handleCategoryChange}
-                                        className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
+                                        className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                         required
                                     />
                                 </div>
-                            </div>
-                            <div className='w-1/2'>
-                                <label className='block font-medium'>Status</label>
-                                <select
-                                    name="progress"
-                                    value={formData.progress || ''}
-                                    onChange={handleChange}
-                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
-                                    required
-                                >
-                                    <option value="">Select Status</option>
-                                    <option value="Not started">Not started</option>
-                                    <option value="In progress">In progress</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Blocked">Blocked</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label className='block font-medium'>Complexity</label>
-                            <select
-                                name="complexity"
-                                value={formData.complexity || ''}
-                                onChange={handleChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
-                                required
-                            >
-                                <option value="">Select Complexity</option>
-                                <option value="Simple">Simple</option>
-                                <option value="Complex">Complex</option>
-                                <option value="Highly Technical">Highly Technical</option>
-                            </select>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className='w-1/2'>
-                                <label className='block font-medium'>Start Date</label>
-                                <input
-                                    type="date"
-                                    name="start_date"
-                                    value={formData.start_date || ''}
-                                    onChange={handleChange}
-                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
-                                    required
-                                />
                             </div>
                             <div className='w-1/2'>
                                 <label className='block font-medium'>Due Date</label>
@@ -216,32 +185,53 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 options={names}
                                 value={names.filter(option => formData.assigned_to?.includes(option.value))}
                                 onChange={handleAssignedToChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
                                 required
                             />
                         </div>
                         <div>
-                            <label className='block font-medium'>Key Stakeholders</label>
-                            <CreatetableSelect
-                                isMulti
-                                options={departmentAgencies}
-                                value={departmentAgencies.filter(option => formData.key_stakeholders?.includes(option.value))}
-                                onChange={handleKeyStakeholderChange}
-                                onCreateOption={handleCreateKeyStakeholder}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4 dark:text-black'
-                                required
+                            <label className='block font-medium'>Status</label>
+                            <input
+                                type="text"
+                                name="status"
+                                value={formData.status || 'Draft'}
+                                readOnly
+                                className={`w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4`}
                             />
                         </div>
-                        <div>
-                            <label className='block font-medium'>Action Items and Notes</label>
-                            <textarea
-                                name="remarks"
-                                rows="3"
-                                value={formData.remarks || ''}
-                                onChange={handleChange}
-                                className="w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4"
-                                required
-                            />
+                        <div className='mt-4'>
+                            <label htmlFor="file" className='text-xs'>Upload scanned signed document once status is <span className='bg-success rounded px-1 text-white'>Approved</span>.</label>
+                            <div
+                                id="file"
+                                className={`relative block w-full appearance-none rounded border border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5 ${formData.status !== 'Approved' && 'opacity-50'}`}
+                            >
+                                <input
+                                    type="file"
+                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document/*"
+                                    name='file'
+                                    value={formData.scanned_file_path || ''}
+                                    onChange={handleFileChange}
+                                    className={`absolute inset-0 z-50 m-0 h-full w-full p-0 opacity-0 outline-none ${formData.status !== 'Approved' && 'cursor-not-allowed'}`}
+                                    required={formData.status === 'Approved'}
+                                    disabled={formData.status !== 'Approved'}
+                                />
+                                <div className="flex flex-col items-center justify-center space-y-3">
+                                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white dark:border-strokedark dark:bg-boxdark text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                                        </svg>
+                                    </span>
+                                    <p>
+                                        <span className="text-primary">Click to upload</span> or
+                                        drag and drop
+                                    </p>
+                                    <p className="mt-1.5">.docx, .xlsx, .ppt, .pdf</p>
+                                    <p>(max, 5mb)</p>
+                                </div>
+                            </div>
+                            {fileName && (
+                                <label className='text-xs italic'>{fileName}</label>
+                            )}
                         </div>
                         <div className="flex justify-end space-x-2">
                             <button
@@ -275,4 +265,4 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
     );
 }
 
-export default AddNewItem;
+export default AddNewDocument

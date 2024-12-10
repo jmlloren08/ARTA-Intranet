@@ -425,34 +425,34 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     className={`translate transform overflow-hidden ${!open ? 'hidden' : ''}`}
                                   >
                                     <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                                      <li>
+                                      {/* <li>
                                         <Link
                                           href="/document-new"
                                           className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-new') && 'bg-graydark dark:bg-meta-4 text-white'}`}
                                         >
                                           New Document
                                         </Link>
-                                      </li>
+                                      </li> */}
                                       <li>
                                         <Link
-                                          href="/document-my"
-                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-my') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                          href="/my-documents"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/my-documents') && 'bg-graydark dark:bg-meta-4 text-white'}`}
                                         >
                                           My Documents
                                         </Link>
                                       </li>
                                       <li>
                                         <Link
-                                          href="/document-all"
-                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-all') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                          href="/all-documents"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/all-documents') && 'bg-graydark dark:bg-meta-4 text-white'}`}
                                         >
                                           All Documents
                                         </Link>
                                       </li>
                                       <li>
                                         <Link
-                                          href="/document-templates"
-                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-templates') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                          href="/documents-templates"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/documents-templates') && 'bg-graydark dark:bg-meta-4 text-white'}`}
                                         >
                                           Templates
                                         </Link>
