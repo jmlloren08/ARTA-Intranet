@@ -20,35 +20,42 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // DMS
     Route::get('/document-dashboard', function () {
-        return Inertia::render(component: 'DMS/Dashboard');
+        return Inertia::render('DMS/Dashboard');
     })->name('document-dashboard');
     Route::get('/document-new', function () {
-        return Inertia::render(component: 'DMS/Document/NewDocument');
+        return Inertia::render('DMS/Document/NewDocument');
     })->name('document-new');
     Route::get('/my-documents', function () {
-        return Inertia::render(component: 'DMS/Document/MyDocuments');
+        return Inertia::render('DMS/Document/MyDocuments');
     })->name('my-documents');
     Route::get('/all-documents', function () {
-        return Inertia::render(component: 'DMS/Document/AllDocuments');
+        return Inertia::render('DMS/Document/AllDocuments');
     })->name('all-documents');
     Route::get('/documents-templates', function () {
-        return Inertia::render(component: 'DMS/Document/Templates');
+        return Inertia::render('DMS/Document/Templates');
     })->name('documents-templates');
     Route::get('/document-in-progress', function () {
-        return Inertia::render(component: 'DMS/Workflow/InProgress');
+        return Inertia::render('DMS/Workflow/InProgress');
     })->name('document-in-progress');
     Route::get('/document-under-review', function () {
-        return Inertia::render(component: 'DMS/Workflow/UnderReview');
+        return Inertia::render('DMS/Workflow/UnderReview');
     })->name('document-under-review');
     Route::get('/document-approved', function () {
-        return Inertia::render(component: 'DMS/Workflow/Approved');
+        return Inertia::render('DMS/Workflow/Approved');
     })->name('document-approved');
     Route::get('/document-rejected', function () {
-        return Inertia::render(component: 'DMS/Workflow/Rejected');
+        return Inertia::render('DMS/Workflow/Rejected');
     })->name('document-rejected');
-    Route::get('/document-version-history', function () {
-        return Inertia::render(component: 'DMS/Workflow/VersionHistory');
-    })->name('document-version-history');
+    Route::get('/view-document', function (Request $request) {
+        return Inertia::render('DMS/Document/ViewDocument', [
+            'document_id' => $request->document_id
+        ]);
+    })->name('view-document');
+    Route::get('/edit-document', function (Request $request) {
+        return Inertia::render('DMS/Document/EditDocument', [
+            'document_id' => $request->document_id
+        ]);
+    })->name('edit-document');
 
 
     // operations
@@ -56,16 +63,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Operations/Dashboard');
     })->name('operations-dashboard');
     Route::get('/operations-eboss-inspection', function () {
-        return Inertia::render(component: 'Operations/eBOSSInspection');
+        return Inertia::render('Operations/eBOSSInspection');
     })->name('operations-eboss-inspection');
     Route::get('/operations-commendation', function () {
-        return Inertia::render(component: 'Operations/Commendation');
+        return Inertia::render('Operations/Commendation');
     })->name('operations-commendation');
     Route::get('/operations-orientation', function () {
-        return Inertia::render(component: 'Operations/Orientation');
+        return Inertia::render('Operations/Orientation');
     })->name('operations-orientation');
     Route::get('/operations-cc-inspection', function () {
-        return Inertia::render(component: 'Operations/CCInspection');
+        return Inertia::render('Operations/CCInspection');
     })->name('operations-cc-inspection');
 
     // activity tracker
@@ -76,7 +83,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('AT/DetailedList');
     })->name('activity-tracker-list');
     Route::get('/activity-tracker-dashboard/list-of-activities-where-status', function (Request $request) {
-        return Inertia::render('AT/ListByStatus', ['selectedStatus' => $request->status]);
+        return Inertia::render('AT/ListByStatus', [
+            'selectedStatus' => $request->status
+        ]);
     })->name('list-of-activities-where-status');
     Route::get('/activity-tracker-dashboard/calendar-of-activities', function () {
         return Inertia::render('AT/Calendar');
@@ -105,6 +114,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // custom / dms
     Route::get('/google/auth', [GoogleController::class, 'authenticate'])->name('google.auth');
+    Route::get('/check-google-authentication', [GoogleController::class, 'checkAuthentication'])->name('google.check.auth');
     Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
     Route::post('/google/docs/create', [GoogleController::class, 'createDocument'])->name('google.docs.create');
     Route::patch('/google/docs/update-document-title/{document_id}', [GoogleController::class, 'updateDocumentTitle'])->name('google.docs.update');
@@ -122,7 +132,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/settings', function () {
-        return Inertia::render(component: 'Settings');
+        return Inertia::render('Settings');
     })->name('settings');
 });
 

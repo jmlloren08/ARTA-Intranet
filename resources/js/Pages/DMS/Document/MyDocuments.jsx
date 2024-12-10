@@ -16,6 +16,17 @@ const MyDocuments = () => {
   const [editItem, setEditItem] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const checkGoogleAuth = async () => {
+    try {
+      const response = await axios.get('/check-google-authentication');
+      if (!response.data.authenticated) {
+        window.location.href = '/google/auth';
+      }
+    } catch (error) {
+      console.error(error.response?.data?.message || 'Error fetching documents');
+    }
+  }
+
   const fetchDocuments = async () => {
     try {
       const response = await axios.get('/list-my-documents');
@@ -46,6 +57,7 @@ const MyDocuments = () => {
   }
 
   useEffect(() => {
+    checkGoogleAuth();
     fetchDocuments();
   }, [refresh]);
 
