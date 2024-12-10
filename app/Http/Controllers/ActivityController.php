@@ -47,7 +47,7 @@ class ActivityController extends Controller
                 'due_date' => $validatedData['due_date'],
                 'key_stakeholders' => implode(', ', $validatedData['key_stakeholders']),
                 'remarks' => $validatedData['remarks'],
-                'created_by' => auth()->user()->name
+                'created_by' => auth()->user()->id
             ]);
 
             $activity->users()->attach($validatedData['assigned_to']);
@@ -99,8 +99,7 @@ class ActivityController extends Controller
                 'start_date' => $validatedData['start_date'],
                 'due_date' => $validatedData['due_date'],
                 'key_stakeholders' => implode(', ', $validatedData['key_stakeholders']),
-                'remarks' => $validatedData['remarks'],
-                'created_by' => auth()->user()->name
+                'remarks' => $validatedData['remarks']
             ]);
 
             $activitiesData->users()->sync($validatedData['assigned_to']);

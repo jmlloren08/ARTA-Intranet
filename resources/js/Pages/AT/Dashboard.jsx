@@ -4,7 +4,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import ChartOne from '../../Components/Charts/ChartOne';
 import ChartThree from '../../Components/Charts/ChartThree';
 import axios from 'axios';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 
 const Dashboard = () => {
 

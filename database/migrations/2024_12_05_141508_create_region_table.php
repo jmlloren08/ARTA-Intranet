@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rfo', function (Blueprint $table) {
+        Schema::create('region', function (Blueprint $table) {
             $table->id();
-            $table->string('rfo_name');
+            $table->string('psgc_code');
+            $table->string('reg_desc');
+            $table->string('reg_code');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rfo');
+        Schema::dropIfExists('region');
     }
 };

@@ -1,6 +1,6 @@
 import React from 'react';
-import DefaultLayout from '../../layout/DefaultLayout';
-import Breadcrumb from '../../Components/Breadcrumbs/Breadcrumb';
+import DefaultLayout from '../../../layout/DefaultLayout';
+import Breadcrumb from '../../../Components/Breadcrumbs/Breadcrumb';
 
 const Approved = () => {
   return (

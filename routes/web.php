@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DepartmentAgenciesController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Notifications\NewActivitySystemNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,21 +22,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/document-dashboard', function () {
         return Inertia::render(component: 'DMS/Dashboard');
     })->name('document-dashboard');
-    Route::get('/document-draft', function () {
-        return Inertia::render(component: 'DMS/Draft');
-    })->name('document-draft');
-    Route::get('/document-for-approval', function () {
-        return Inertia::render(component: 'DMS/ForApproval');
-    })->name('document-for-approval');
-    Route::get('/document-sent', function () {
-        return Inertia::render(component: 'DMS/Sent');
-    })->name('document-sent');
-    Route::get('/document-viewed', function () {
-        return Inertia::render(component: 'DMS/Viewed');
-    })->name('document-viewed');
-    Route::get('/document-expired', function () {
-        return Inertia::render(component: 'DMS/Expired');
-    })->name('document-expired');
+    Route::get('/document-new', function () {
+        return Inertia::render(component: 'DMS/Document/NewDocument');
+    })->name('document-new');
+    Route::get('/my-documents', function () {
+        return Inertia::render(component: 'DMS/Document/MyDocuments');
+    })->name('my-documents');
+    Route::get('/all-documents', function () {
+        return Inertia::render(component: 'DMS/Document/AllDocuments');
+    })->name('all-documents');
+    Route::get('/documents-templates', function () {
+        return Inertia::render(component: 'DMS/Document/Templates');
+    })->name('documents-templates');
+    Route::get('/document-in-progress', function () {
+        return Inertia::render(component: 'DMS/Workflow/InProgress');
+    })->name('document-in-progress');
+    Route::get('/document-under-review', function () {
+        return Inertia::render(component: 'DMS/Workflow/UnderReview');
+    })->name('document-under-review');
+    Route::get('/document-approved', function () {
+        return Inertia::render(component: 'DMS/Workflow/Approved');
+    })->name('document-approved');
+    Route::get('/document-rejected', function () {
+        return Inertia::render(component: 'DMS/Workflow/Rejected');
+    })->name('document-rejected');
+    Route::get('/document-version-history', function () {
+        return Inertia::render(component: 'DMS/Workflow/VersionHistory');
+    })->name('document-version-history');
+
 
     // operations
     Route::get('/operations-dashboard', function () {
@@ -68,7 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('AT/Calendar');
     })->name('calendar-of-activities');
 
-    // custom
+    // custom / at
     Route::post('/add-new-work-items', [ActivityController::class, 'store']);
     Route::patch('/update-work-items/{id}', [ActivityController::class, 'update']);
     Route::get('/get-all-activities', [ActivityController::class, 'getAllActivities']);
@@ -78,10 +92,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-activities-where-status', [ActivityController::class, 'getActivitiesWhereStatus']);
     Route::get('/get-key-stakeholders', [DepartmentAgenciesController::class, 'getDepartmentAgencies']);
 
+    // custom / operations
+    Route::get('/get-count-operations', [OperationsController::class, 'getCountOperations']);
+    Route::get('/get-regions', [OperationsController::class, 'getRegions']);
+    Route::get('/get-provinces-by-region', [OperationsController::class, 'getProvincesByRegion']);
+    Route::get('/get-cities-municipalities-by-province', [OperationsController::class, 'getCitiesMunicipalitiesByProvince']);
+
     // notifications
     Route::get('/get-notifications', [NotificationController::class, 'getNotifications']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markNotificationAsRead']);
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+
+    // custom / dms
+    Route::get('/google/auth', [GoogleController::class, 'authenticate'])->name('google.auth');
+    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+    Route::post('/google/docs/create', [GoogleController::class, 'createDocument'])->name('google.docs.create');
+    Route::patch('/google/docs/update-document-title/{document_id}', [GoogleController::class, 'updateDocumentTitle'])->name('google.docs.update');
+    Route::get('/list-my-documents', [DocumentController::class, 'getMyDocuments']);
+    Route::get('/list-all-documents', [DocumentController::class, 'getAllDocuments']);
+    Route::get('/list-in-progress-documents', [DocumentController::class, 'getInProgressDocuments']);
+    Route::post('/create-new-document', [DocumentController::class, 'store']);
+    Route::put('/update-document/{id}', [DocumentController::class, 'update']);
+    Route::patch('/update-document-metadata/{id}', [DocumentController::class, 'updateDocumentMetadata']);
 
     // profile & settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

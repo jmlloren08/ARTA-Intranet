@@ -387,116 +387,170 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                               Dashboard
                             </Link>
                           </li>
-                          <li>
-                            <Link
-                              href="/document-draft"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-draft') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              Draft
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-for-approval"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-for-approval') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              Waiting for Input
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-sent"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-sent') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
-                              </svg>
-                              Signed/Executed
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-viewed"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-viewed') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              Under Legal Review
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-expired"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-expired') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              Under Revision
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-due-for-review"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-due-for-review') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              Due for Review
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-archived"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-archived') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                              </svg>
-                              Archived
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-in-progress"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-in-progress') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                              </svg>
-                              In Progress
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-rejected"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-rejected') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                              </svg>
-                              Rejected
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/document-approved"
-                              className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-approved') && 'bg-graydark dark:bg-meta-4 text-white'}`}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
-                              </svg>
-                              Approved
-                            </Link>
-                          </li>
+                          {/* <!-- Menu Item Documents --> */}
+                          <SidebarLinkGroup activeCondition={url === '/'}>
+                            {(handleClick, open) => {
+                              return (
+                                <>
+                                  <Link
+                                    href="#"
+                                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                                    }}
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+                                    Documents
+                                    <svg
+                                      className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open ? 'rotate-180' : ''}`}
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 20 20"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                        fill=""
+                                      />
+                                    </svg>
+                                  </Link>
+                                  {/* <!-- Dropdown Menu Start --> */}
+                                  <div
+                                    className={`translate transform overflow-hidden ${!open ? 'hidden' : ''}`}
+                                  >
+                                    <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                      {/* <li>
+                                        <Link
+                                          href="/document-new"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-new') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          New Document
+                                        </Link>
+                                      </li> */}
+                                      <li>
+                                        <Link
+                                          href="/my-documents"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/my-documents') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          My Documents
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/all-documents"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/all-documents') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          All Documents
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/documents-templates"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/documents-templates') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          Templates
+                                        </Link>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  {/* <!-- Dropdown Menu End --> */}
+                                </>
+                              );
+                            }}
+                          </SidebarLinkGroup>
+                          {/* <!-- Menu Item Documents --> */}
+                          {/* <!-- Menu Item Documents --> */}
+                          <SidebarLinkGroup activeCondition={url === '/'}>
+                            {(handleClick, open) => {
+                              return (
+                                <>
+                                  <Link
+                                    href="#"
+                                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                                    }}
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                    Workflow
+                                    <svg
+                                      className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open ? 'rotate-180' : ''}`}
+                                      width="20"
+                                      height="20"
+                                      viewBox="0 0 20 20"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                        fill=""
+                                      />
+                                    </svg>
+                                  </Link>
+                                  {/* <!-- Dropdown Menu Start --> */}
+                                  <div
+                                    className={`translate transform overflow-hidden ${!open ? 'hidden' : ''}`}
+                                  >
+                                    <ul className="mt-4 flex flex-col gap-2.5 pl-6">
+                                      <li>
+                                        <Link
+                                          href="/document-in-progress"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-in-progress') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          In Progress
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/document-under-review"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-under-review') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          Under Review
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/document-approved"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-approved') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          Approved
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/document-rejected"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-rejected') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          Rejected
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link
+                                          href="/document-version-history"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/document-version-history') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                        >
+                                          Version History
+                                        </Link>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  {/* <!-- Dropdown Menu End --> */}
+                                </>
+                              );
+                            }}
+                          </SidebarLinkGroup>
+                          {/* <!-- Menu Item Documents --> */}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

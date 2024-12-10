@@ -3,7 +3,9 @@
 /public/build
 /public/hot
 /public/storage
+/public/storage/client_secret.json
 /storage/*.key
+/storage/client_secret.json
 /storage/pail
 /vendor
 .env

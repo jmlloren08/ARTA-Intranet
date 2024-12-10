@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UsersActivities extends Model
+class Region extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,8 @@ class UsersActivities extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'activity_id'
+        'psgc_code',
+        'reg_desc',
+        'reg_code'
     ];
 }

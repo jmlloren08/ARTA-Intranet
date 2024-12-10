@@ -35,6 +35,10 @@ const ChartOne = ({ data }) => {
     xaxis: {
       categories: ['Completed', 'In progress', 'Not started', 'Blocked']
     }
+    // yaxis: {
+    //   min: 0,
+    //   max: maxDataValue + 10
+    // }
   });
 
   useEffect(() => {
@@ -86,6 +90,6 @@ const ChartOne = ({ data }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ChartOne;
