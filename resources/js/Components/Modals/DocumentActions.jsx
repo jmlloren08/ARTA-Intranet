@@ -7,12 +7,13 @@ const DocumentActions = ({ doc, openEditModal, openReceiveModal }) => {
     const toggleMenu = () => setShowMenu(!showMenu);
 
     const menuOptions = [
-        { label: 'View in Google Docs', action: () => window.open(`https://docs.google.com/document/d/${doc.document_id}/preview`, '_blank') },
+        { label: 'View in Google Docs', action: () => window.open(route('view-document', { document_id: doc.document_id }), '_blank') },
+        { label: 'Edit in Google Docs', action: () => window.open(route('edit-document', { document_id: doc.document_id }), '_blank') },
         ...(doc.status === 'Draft') ?
             [
                 { label: 'Receive Document', action: () => openReceiveModal(doc) }
             ] : [
-                { label: 'Edit in Google Docs', action: () => window.open(doc.document_url, '_blank') },
+                { label: 'Edit in Google Docs', action: () => window.open(route('edit-document', { document_id: doc.document_id }), '_blank') },
                 { label: 'Edit metadata', action: () => openEditModal(doc) },
                 { label: 'Audit Log', action: () => alert('Audit Log feature is under development.') },
                 { label: 'Version history', action: () => alert('Document Versions feature is under development.') },

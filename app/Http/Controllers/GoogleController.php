@@ -109,9 +109,19 @@ class GoogleController extends Controller
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
+    public function checkAuthentication()
+    {
+        $client = $this->getGoogleClient();
+        if ($client->getAccessToken()) {
+            return response()->json(['authenticated' => true]);
+        }
+        return response()->json(['authenticated' => false]);
+    }
     private function getGoogleClient()
     {
         try {
+
+            $filePath = storage_path('client_secret.json');
 
             $client = new Client();
             $client->setAuthConfig($filePath);
