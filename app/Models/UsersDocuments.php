@@ -16,6 +16,6 @@ class UsersDocuments extends Model
      */
     protected $fillable = [
         'user_id',
-        'activity_id',
+        'document_id',
     ];
 }
