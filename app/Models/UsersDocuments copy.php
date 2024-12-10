@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UsersActivities extends Model
+class UsersDocuments extends Model
 {
     use HasFactory;
 
@@ -16,6 +16,6 @@ class UsersActivities extends Model
      */
     protected $fillable = [
         'user_id',
-        'activity_id'
+        'document_id'
     ];
 }
