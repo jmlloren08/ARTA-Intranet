@@ -28,9 +28,24 @@ class Document extends Model
         'scanned_file_path',
         'document_url'
     ];
-
+    // A document can have many users (through users_documents)
     public function users()
     {
         return $this->belongsToMany(User::class, 'users_documents', 'document_id', 'user_id');
+    }
+    // A document can have many routing actions (through document_routing)
+    public function routings()
+    {
+        return $this->hasMany(DocumentRouting::class);
+    }
+    // A document can have many audit logs (through audit_logs)
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+    // A document can have many versions (through document_versions)
+    public function versions()
+    {
+        return $this->hasMany(DocumentVersion::class);
     }
 }

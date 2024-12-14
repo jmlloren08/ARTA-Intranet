@@ -52,4 +52,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // A user can be assigned to many documents (through users_documents)
+    public function documents()
+    {
+        return $this->belongsToMany(Document::class, 'users_documents', 'user_id', 'document_id');
+    }
 }

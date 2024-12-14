@@ -6,9 +6,9 @@ import { Head } from '@inertiajs/react';
 import { ToastContainer } from 'react-toastify';
 import AddNewDocument from '../../../Components/Modals/AddNewDocument';
 import DocumentActions from '../../../Components/Modals/DocumentActions';
-import Loader from '@/common/Loader';
+import Loader from '../../../common/Loader';
 
-const AllDocuments = () => {
+const ToReceive = () => {
 
   const [documents, setDocuments] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +18,7 @@ const AllDocuments = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.get('/list-all-documents');
+      const response = await axios.get('/list-documents-to-receive');
       setDocuments(response.data);
     } catch (error) {
       console.error(error.response?.data?.message || 'Error fetching documents');
@@ -46,13 +46,13 @@ const AllDocuments = () => {
 
   return (
     <>
-      <Head title="All Documents" />
+      <Head title="All Documents To Receive" />
       <ToastContainer />
       <div className="mx-auto max-w-full">
-        <Breadcrumb pageName="All Documents" />
+        <Breadcrumb pageName="All Documents To Received" />
         <div className='flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 mb-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between'>
           <div className='flex flex-col items-start sm:items-center'>
-            <p className='text-xs'>All documents created by you or assigned to you are listed here.</p>
+            <p className='text-xs'>All documents assigned to you are listed here.</p>
           </div>
         </div>
         <div className='p-4 bg-white rounded border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
@@ -76,7 +76,19 @@ const AllDocuments = () => {
                 {documents.map((doc, index) => (
                   <tr key={index}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.title}</p></td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.status}</p></td>
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className='text-sm'>
+                        <span className={`inline-block rounded-full px-2 py-1 text-xs font-semibold leading-5
+                        ${doc.status === 'Draft' ? 'bg-warning bg-opacity-20 border border-warning text-warning' :
+                            doc.status === 'In Progress' ? 'bg-secondary bg-opacity-20 border border-secondary text-secondary' :
+                              doc.status === 'Under Review' ? 'bg-primary bg-opacity-20 border border-primary text-primary' :
+                                doc.status === 'Approved' ? 'bg-success bg-opacity-20 border border-success text-success' :
+                                  doc.status === 'Rejected' ? 'bg-danger bg-opacity-20 border border-danger text-danger' :
+                                    'bg-gray-600 bg-opacity-20 border border-gray-600 text-gray-600'}`}>
+                          {doc.status}
+                        </span>
+                      </p>
+                    </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.due_date}</p></td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center">
@@ -104,6 +116,6 @@ const AllDocuments = () => {
   );
 };
 
-AllDocuments.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
+ToReceive.layout = (page) => <DefaultLayout>{page}</DefaultLayout>;
 
-export default AllDocuments;
+export default ToReceive;

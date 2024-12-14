@@ -28,9 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-documents', function () {
         return Inertia::render('DMS/Document/MyDocuments');
     })->name('my-documents');
-    Route::get('/all-documents', function () {
-        return Inertia::render('DMS/Document/AllDocuments');
-    })->name('all-documents');
+    Route::get('/all-documents-to-receive', function () {
+        return Inertia::render('DMS/Document/ToReceive');
+    })->name('all-documents-to-receive');
     Route::get('/documents-templates', function () {
         return Inertia::render('DMS/Document/Templates');
     })->name('documents-templates');
@@ -112,18 +112,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markNotificationAsRead']);
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
-    // custom / dms
+    // custom / dms / google docs integration
     Route::get('/google/auth', [GoogleController::class, 'authenticate'])->name('google.auth');
     Route::get('/check-google-authentication', [GoogleController::class, 'checkAuthentication'])->name('google.check.auth');
     Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
     Route::post('/google/docs/create', [GoogleController::class, 'createDocument'])->name('google.docs.create');
     Route::patch('/google/docs/update-document-title/{document_id}', [GoogleController::class, 'updateDocumentTitle'])->name('google.docs.update');
+    // custom / dms
     Route::get('/list-my-documents', [DocumentController::class, 'getMyDocuments']);
-    Route::get('/list-all-documents', [DocumentController::class, 'getAllDocuments']);
+    Route::get('/list-documents-to-receive', [DocumentController::class, 'getDocumentsToReceive']);
     Route::get('/list-in-progress-documents', [DocumentController::class, 'getInProgressDocuments']);
     Route::post('/create-new-document', [DocumentController::class, 'store']);
-    Route::put('/update-document/{id}', [DocumentController::class, 'update']);
+    Route::patch('/update-document/{id}', [DocumentController::class, 'update']);
     Route::patch('/update-document-metadata/{id}', [DocumentController::class, 'updateDocumentMetadata']);
+    Route::patch('/route-document/{id}', [DocumentController::class, 'routeDocument']);
+    // custom / dms / features
+    Route::get('/documet/{id}/audit-logs', [DocumentController::class, 'getAuditLogs']);
+    Route::get('/document/{id}/versions', [DocumentController::class, 'getVersions']);
+    Route::post('/document/{id}/routing-action', [DocumentController::class, 'storeRoutingAction']);
+    Route::post('/document/{id}/log-action', [DocumentController::class, 'logAction']);
 
     // profile & settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -18,7 +18,7 @@ const EditDocument = ({ document_id }) => {
                 <iframe
                     src={`https://docs.google.com/document/d/${document_id}/edit`}
                     width={'100%'}
-                    height={'600px'}
+                    height={'800'}
                     style={{ border: 'none' }}
                     allowFullScreen
                 ></iframe>

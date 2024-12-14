@@ -443,10 +443,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                       </li>
                                       <li>
                                         <Link
-                                          href="/all-documents"
-                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/all-documents') && 'bg-graydark dark:bg-meta-4 text-white'}`}
+                                          href="/all-documents-to-receive"
+                                          className={`group relative flex items-center gap-2.5 rounded-sm py-1 px-4 font-medium duration-300 ease-in-out hover:bg-graydark hover:text-white ${(url === '/all-documents-to-receive') && 'bg-graydark dark:bg-meta-4 text-white'}`}
                                         >
-                                          All Documents
+                                          To Receive
                                         </Link>
                                       </li>
                                       <li>

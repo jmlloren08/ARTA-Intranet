@@ -1,25 +1,38 @@
+import { usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
+import RouteDocument from './RouteDocument';
 
-const DocumentActions = ({ doc, openEditModal, openReceiveModal }) => {
+const DocumentActions = ({ doc, openEditModal, onRouteSuccess }) => {
 
+    const user = usePage().props.auth.user;
+
+    const [isModalIsRouteOpen, setIsModalIsRouteOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
-    const toggleMenu = () => setShowMenu(!showMenu);
+    const isCreator = parseInt(doc.created_by) === user.id;
 
-    const menuOptions = [
-        { label: 'View in Google Docs', action: () => window.open(route('view-document', { document_id: doc.document_id }), '_blank') },
-        { label: 'Edit in Google Docs', action: () => window.open(route('edit-document', { document_id: doc.document_id }), '_blank') },
-        ...(doc.status === 'Draft') ?
-            [
-                { label: 'Receive Document', action: () => openReceiveModal(doc) }
-            ] : [
-                { label: 'Edit in Google Docs', action: () => window.open(route('edit-document', { document_id: doc.document_id }), '_blank') },
-                { label: 'Edit metadata', action: () => openEditModal(doc) },
-                { label: 'Audit Log', action: () => alert('Audit Log feature is under development.') },
-                { label: 'Version history', action: () => alert('Document Versions feature is under development.') },
-                { label: 'Route Document', action: () => alert('Route document feature is under development.') }
-            ]
-    ];
+    const isRouted = doc.document_status === 'Routed';
+    const isReturned = doc.document_status === 'Returned';
+    
+    const toggleMenu = () => setShowMenu(!showMenu);
+    const handleRoute = () => setIsModalIsRouteOpen(true);
+    const closeModal = () => setIsModalIsRouteOpen(false);
+
+    const menuOptions = isCreator ?
+        [
+            !isRouted && { label: 'Route Document', action: () => handleRoute() },
+            isRouted || !isReturned ? { label: 'View in Google Docs', action: () => window.open(route('view-document', { document_id: doc.document_id }), '_blank') } :
+            { label: 'Edit in Google Docs', action: () => window.open(route('edit-document', { document_id: doc.document_id }), '_blank') },
+            { label: 'Edit metadata', action: () => openEditModal(doc) },
+            { label: 'Audit Log', action: () => alert('Audit Log feature is under development.') },
+            { label: 'Version history', action: () => alert('Document Versions feature is under development.') }
+        ]
+        :
+        [
+            { label: 'View in Google Docs', action: () => window.open(route('view-document', { document_id: doc.document_id }), '_blank') },
+            { label: 'Audit Log', action: () => alert('Audit Log feature is under development.') },
+            { label: 'Version history', action: () => alert('Document Versions feature is under development.') }
+        ];
 
     return (
         <div className='relative'>
@@ -52,6 +65,14 @@ const DocumentActions = ({ doc, openEditModal, openReceiveModal }) => {
                         ))}
                     </ul>
                 </div>
+            )}
+            {isModalIsRouteOpen && (
+                <RouteDocument
+                    isOpen={isModalIsRouteOpen}
+                    onClose={closeModal}
+                    initialFormData={{ id: doc.id }}
+                    onAddSuccess={onRouteSuccess}
+                />
             )}
         </div>
     );

@@ -42,7 +42,6 @@ class DocumentController extends Controller
 
             ]);
         } catch (\Exception $e) {
-
             Log::error("Error storing document metadata: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
@@ -62,6 +61,13 @@ class DocumentController extends Controller
 
             $document = Document::findOrFail($id);
 
+            // Save current version
+            // $document->versions()->create([
+            //     'document_id' => $document->document_id,
+            //     'version_number' => $document->versions()->count() + 1,
+            //     'google_doc_version_id' => $document->google_doc_version_id
+            // ]);
+
             $document->update([
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
@@ -74,7 +80,6 @@ class DocumentController extends Controller
 
             return response()->json(['message' => 'Document metadata updated successfully!']);
         } catch (\Exception $e) {
-
             Log::error("Error updating document metadata: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
@@ -97,8 +102,44 @@ class DocumentController extends Controller
 
             return response()->json(['message' => 'Document created successfully!']);
         } catch (\Exception $e) {
-
             Log::error("Error updating document: " . $e->getMessage());
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
+    }
+    public function routeDocument(Request $request, $id)
+    {
+        try {
+
+            $validatedData = $request->validate([
+                'remarks_instructions' => 'required|string|max:1000'
+            ]);
+
+            $document = Document::findOrFail($id);
+            $assignedUsers = $document->users()->get();
+
+            if ($assignedUsers->isEmpty()) {
+                return response()->json(['message' => 'No assigned users found for this document.'], 400);
+            }
+
+            foreach ($assignedUsers as $assignedUser) {
+                $document->routings()->create([
+                    'from_user_id' => auth()->user()->id,
+                    'to_user_id' => $assignedUser->id,
+                    'action' => 'Route',
+                    'remarks_instructions' => $validatedData['remarks_instructions']
+                ]);
+            }
+
+            $document->update([
+                'status' => 'Routed',
+                'updated_by' => auth()->user()->id
+            ]);
+
+            $this->logAction($document, 'Routed', auth()->user()->name . ' routed the document.');
+
+            return response()->json(['message' => 'Document routed successfully!']);
+        } catch (\Exception $e) {
+            Log::error("Error routing document: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
@@ -111,7 +152,7 @@ class DocumentController extends Controller
             $documents = Document::where('created_by', $user->id)
                 ->whereNotNull('document_id')
                 ->whereNotNull('document_url')
-                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'document_url')
+                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
@@ -127,12 +168,11 @@ class DocumentController extends Controller
 
             return response()->json($formattedDocuments);
         } catch (\Exception $e) {
-
             Log::error("Error fetching my documents: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
-    public function getAllDocuments()
+    public function getDocumentsToReceive()
     {
         try {
 
@@ -142,7 +182,7 @@ class DocumentController extends Controller
                 $documents = Document::with('users:id,name')
                 ->whereNotNull('document_id')
                 ->whereNotNull('document_url')
-                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'status', 'due_date', 'assigned_to', 'document_url')
+                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get()
                 :
@@ -152,8 +192,8 @@ class DocumentController extends Controller
                 ->whereHas('users', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
-                ->orWhere('created_by', $user->id)
-                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'document_url')
+                ->where('status', 'Routed')
+                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
@@ -169,7 +209,6 @@ class DocumentController extends Controller
 
             return response()->json($formattedDocuments);
         } catch (\Exception $e) {
-
             Log::error("Error fetching document metadata: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
@@ -197,8 +236,45 @@ class DocumentController extends Controller
 
             return response()->json($formattedDocuments);
         } catch (\Exception $e) {
-
             Log::error("Error fetching In Progress document: " . $e->getMessage());
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
+    }
+    // public function getAuditLogs($id)
+    // {
+    //     try {
+
+    //         $document = Document::with('auditLogs.user:id,name')->findOrFail($id);
+
+    //         return response()->json($document->auditLogs);
+    //     } catch (\Exception $e) {
+    //         Log::error("Error fetching audit logs: " . $e->getMessage());
+    //         return response()->json(['message' => 'Internal server error'], 500);
+    //     }
+    // }
+    // public function getVersions($id)
+    // {
+    //     try {
+
+    //         $document = Document::with('versions')->findOrFail($id);
+
+    //         return response()->json($document->versions);
+    //     } catch (\Exception $e) {
+    //         Log::error("Error fetching versions: " . $e->getMessage());
+    //         return response()->json(['message' => 'Internal server error'], 500);
+    //     }
+    // }
+    protected function logAction($document, $action, $details = null)
+    {
+        try {
+            $document->auditLogs()->create([
+                'document_id' => $document->id,
+                'performed_by_user_id' => auth()->user()->id,
+                'action' => $action,
+                'details' => $details
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error logging action: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }

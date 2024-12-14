@@ -48,6 +48,10 @@ const MyDocuments = () => {
     setIsModalOpen(true);
   }
 
+  const handleRouteSuccess = () => {
+    setRefresh(prev => !prev);
+  }
+
   const handleAddSuccess = () => {
     setRefresh(prev => !prev);
   }
@@ -106,11 +110,27 @@ const MyDocuments = () => {
                 {documents.map((doc, index) => (
                   <tr key={index}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.title}</p></td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.status}</p></td>
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className='text-sm'>
+                        <span className={`inline-block rounded-full px-2 py-1 text-xs font-semibold leading-5
+                        ${doc.status === 'Draft' ? 'bg-warning bg-opacity-20 border border-warning text-warning' :
+                            doc.status === 'In Progress' ? 'bg-secondary bg-opacity-20 border border-secondary text-secondary' :
+                              doc.status === 'Under Review' ? 'bg-primary bg-opacity-20 border border-primary text-primary' :
+                                doc.status === 'Approved' ? 'bg-success bg-opacity-20 border border-success text-success' :
+                                  doc.status === 'Rejected' ? 'bg-danger bg-opacity-20 border border-danger text-danger' :
+                                    'bg-gray-600 bg-opacity-20 border border-gray-600 text-gray-600'}`}>
+                          {doc.status}
+                        </span>
+                      </p>
+                    </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p className='text-sm'>{doc.due_date}</p></td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center">
-                        <DocumentActions doc={doc} openEditModal={openEditModal} />
+                        <DocumentActions
+                          doc={doc}
+                          openEditModal={openEditModal}
+                          onRouteSuccess={handleRouteSuccess}
+                        />
                       </div>
                     </td>
                   </tr>

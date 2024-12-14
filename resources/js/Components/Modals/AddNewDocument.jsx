@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
-import { usePage } from '@inertiajs/react';
 
 const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormData, isEditMode }) => {
 
@@ -12,7 +11,6 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
     const [names, setNames] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState('');
-    const user = usePage().props.auth.user;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -76,7 +74,7 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
                 const response = await axios.post('/google/docs/create', { title: formData.title });
                 const { document_id, document_url } = response.data;
                 // update document id and url, after metadata is created
-                const response2 = await axios.put(`/update-document/${savedDocument.id}`, {
+                const response2 = await axios.patch(`/update-document/${savedDocument.id}`, {
                     document_id,
                     document_url
                 });
@@ -139,6 +137,7 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
                                 value={formData.title || ''}
                                 onChange={handleChange}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
+                                autoFocus={true}
                                 required
                             />
                         </div>
