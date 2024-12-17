@@ -8,7 +8,6 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
 
     const [formData, setFormData] = useState('');
     const [offices, setOffices] = useState([]);
-    const [names, setNames] = useState([]);
     const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState('');
 
@@ -18,10 +17,6 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
 
     const handleCategoryChange = (selectedOption) => {
         setFormData({ ...formData, category: selectedOption ? selectedOption.value : '' });
-    }
-
-    const handleAssignedToChange = (selectedOptions) => {
-        setFormData({ ...formData, assigned_to: selectedOptions ? selectedOptions.map((option) => option.value) : [] });
     }
 
     const handleFileChange = async (e) => {
@@ -91,16 +86,6 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
     }
 
     useEffect(() => {
-        axios.get('/get-names')
-            .then((response) => {
-                setNames(response.data.map(user => ({ value: user.id, label: user.name })));
-            })
-            .catch((error) => {
-                console.error(error.response?.data?.message || 'Error fetching data');
-            })
-    }, []);
-
-    useEffect(() => {
         axios.get('/get-distinct-offices')
             .then((response) => {
                 setOffices(response.data.map(office => ({ value: office.office, label: office.office })));
@@ -166,6 +151,33 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
                                 </div>
                             </div>
                             <div className='w-1/2'>
+                                <label className="block font-medium">Complexity</label>
+                                <select
+                                    name="complexity"
+                                    value={formData.complexity || ''}
+                                    onChange={handleChange}
+                                    className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
+                                    required
+                                >
+                                    <option value="">Select...</option>
+                                    <option value="Simple">Simple</option>
+                                    <option value="Complex">Complex</option>
+                                    <option value="Highly Technical">Highly Technical</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className='flex gap-4'>
+                            <div className='w-1/2'>
+                                <label className='block font-medium'>Status</label>
+                                <input
+                                    type="text"
+                                    name="status"
+                                    value={formData.status || 'Draft'}
+                                    readOnly
+                                    className={`w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4`}
+                                />
+                            </div>
+                            <div className='w-1/2'>
                                 <label className='block font-medium'>Due Date</label>
                                 <input
                                     type="date"
@@ -176,27 +188,6 @@ const AddNewDocument = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialF
                                     required
                                 />
                             </div>
-                        </div>
-                        <div>
-                            <label className='block font-medium'>Assigned To</label>
-                            <Select
-                                isMulti
-                                options={names}
-                                value={names.filter(option => formData.assigned_to?.includes(option.value))}
-                                onChange={handleAssignedToChange}
-                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className='block font-medium'>Status</label>
-                            <input
-                                type="text"
-                                name="status"
-                                value={formData.status || 'Draft'}
-                                readOnly
-                                className={`w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4`}
-                            />
                         </div>
                         <div className='mt-4'>
                             <label htmlFor="file" className='text-xs'>Upload scanned signed document once status is <span className='bg-success rounded px-1 text-white'>Approved</span>.</label>

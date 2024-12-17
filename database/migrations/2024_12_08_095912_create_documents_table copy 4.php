@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('documents', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(999999);
             $table->string('document_id')->unique();
             $table->string('document_number')->unique();
             $table->string('title');
             $table->string('description');
             $table->string('category');
+            $table->string('complexity');
             $table->string('status')->default('Draft');
             $table->date('due_date');
-            $table->string('assigned_to')->nullable();
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->string('scanned_file_path')->nullable();

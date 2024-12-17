@@ -28,6 +28,6 @@ class AuditLog extends Model
     // A document audit log belongs to one user
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'performed_by_user_id');
     }
 }

@@ -248,7 +248,6 @@ const AddNewItem = ({ isOpen, onClose, onAddSuccess, onEditSuccess, initialFormD
                                 type="button"
                                 onClick={handleClose}
                                 className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
-                                required
                             >
                                 Cancel
                             </button>

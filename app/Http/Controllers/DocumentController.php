@@ -17,24 +17,24 @@ class DocumentController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:1000',
                 'category' => 'required|string',
-                'due_date' => 'required|date|after_or_equal:today',
-                'assigned_to' => 'required|array',
-                'assigned_to.*' => 'required|integer|exists:users,id',
+                'complexity' => 'required|string',
+                'due_date' => 'required|date|after_or_equal:today'
             ]);
 
-            $document_number = 'ARTA' . '-' . auth()->user()->office . '-' . today()->format('Y-m-d') . '-' . Str::random(6);
+            $document_number = $this->generateDocumentNumber();
 
             $document = Document::create([
                 'document_number' => $document_number,
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'category' => $validatedData['category'],
+                'complexity' => $validatedData['complexity'],
                 'status' => 'Draft',
                 'due_date' => $validatedData['due_date'],
                 'created_by' => auth()->user()->id
             ]);
 
-            $document->users()->attach($validatedData['assigned_to']);
+            $this->logAction($document, 'Created', 'Created new document.');
 
             return response()->json([
                 'document' => $document,
@@ -54,9 +54,8 @@ class DocumentController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:1000',
                 'category' => 'required|string',
-                'due_date' => 'required|date|after_or_equal:today',
-                'assigned_to' => 'required|array',
-                'assigned_to.*' => 'required|integer|exists:users,id',
+                'complexity' => 'required|string',
+                'due_date' => 'required|date'
             ]);
 
             $document = Document::findOrFail($id);
@@ -72,11 +71,12 @@ class DocumentController extends Controller
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'category' => $validatedData['category'],
+                'complexity' => $validatedData['complexity'],
                 'due_date' => $validatedData['due_date'],
                 'updated_by' => auth()->user()->id
             ]);
 
-            $document->users()->sync($validatedData['assigned_to']);
+            $this->logAction($document, 'Modified', 'Modified document metadata.');
 
             return response()->json(['message' => 'Document metadata updated successfully!']);
         } catch (\Exception $e) {
@@ -111,20 +111,19 @@ class DocumentController extends Controller
         try {
 
             $validatedData = $request->validate([
+                'assigned_to' => 'required|array',
+                'assigned_to.*' => 'required|integer|exists:users,id',
                 'remarks_instructions' => 'required|string|max:1000'
             ]);
 
             $document = Document::findOrFail($id);
-            $assignedUsers = $document->users()->get();
 
-            if ($assignedUsers->isEmpty()) {
-                return response()->json(['message' => 'No assigned users found for this document.'], 400);
-            }
+            $document->users()->attach($validatedData['assigned_to']);
 
-            foreach ($assignedUsers as $assignedUser) {
+            foreach ($validatedData['assigned_to'] as $routedUserId) {
                 $document->routings()->create([
                     'from_user_id' => auth()->user()->id,
-                    'to_user_id' => $assignedUser->id,
+                    'to_user_id' => $routedUserId,
                     'action' => 'Route',
                     'remarks_instructions' => $validatedData['remarks_instructions']
                 ]);
@@ -135,7 +134,7 @@ class DocumentController extends Controller
                 'updated_by' => auth()->user()->id
             ]);
 
-            $this->logAction($document, 'Routed', auth()->user()->name . ' routed the document.');
+            $this->logAction($document, 'Routed', 'Routed the document.');
 
             return response()->json(['message' => 'Document routed successfully!']);
         } catch (\Exception $e) {
@@ -152,7 +151,7 @@ class DocumentController extends Controller
             $documents = Document::where('created_by', $user->id)
                 ->whereNotNull('document_id')
                 ->whereNotNull('document_url')
-                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
+                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'complexity', 'status', 'due_date', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
@@ -182,7 +181,7 @@ class DocumentController extends Controller
                 $documents = Document::with('users:id,name')
                 ->whereNotNull('document_id')
                 ->whereNotNull('document_url')
-                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
+                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'complexity', 'status', 'due_date', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get()
                 :
@@ -193,7 +192,7 @@ class DocumentController extends Controller
                     $query->where('user_id', $user->id);
                 })
                 ->where('status', 'Routed')
-                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'status', 'due_date', 'assigned_to', 'created_by', 'document_url')
+                ->select('id', 'title', 'document_id', 'document_number', 'description', 'category', 'complexity', 'status', 'due_date', 'created_by', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
@@ -220,7 +219,7 @@ class DocumentController extends Controller
             $documents = Document::where('status', 'In Progress')
                 ->whereNotNull('document_id')
                 ->whereNotNull('document_url')
-                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'status', 'due_date', 'assigned_to', 'document_url')
+                ->select('id', 'document_id', 'document_number', 'title', 'description', 'category', 'status', 'due_date', 'document_url')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
@@ -240,18 +239,20 @@ class DocumentController extends Controller
             return response()->json(['message' => 'Internal server error'], 500);
         }
     }
-    // public function getAuditLogs($id)
-    // {
-    //     try {
+    public function getAuditLogs($id)
+    {
+        try {
 
-    //         $document = Document::with('auditLogs.user:id,name')->findOrFail($id);
+            $document = Document::findOrFail($id);
 
-    //         return response()->json($document->auditLogs);
-    //     } catch (\Exception $e) {
-    //         Log::error("Error fetching audit logs: " . $e->getMessage());
-    //         return response()->json(['message' => 'Internal server error'], 500);
-    //     }
-    // }
+            $auditLogs = $document->auditLogs()->with('user:id,name')->orderBy('updated_at', 'desc')->get();
+
+            return response()->json($auditLogs);
+        } catch (\Exception $e) {
+            Log::error("Error fetching audit logs: " . $e->getMessage());
+            return response()->json(['message' => 'Internal server error'], 500);
+        }
+    }
     // public function getVersions($id)
     // {
     //     try {
@@ -277,5 +278,9 @@ class DocumentController extends Controller
             Log::error("Error logging action: " . $e->getMessage());
             return response()->json(['message' => 'Internal server error'], 500);
         }
+    }
+    protected function generateDocumentNumber()
+    {
+        return 'ARTA' . '-' . auth()->user()->office . '-' . today()->format('Y-m-d') . '-' . Str::random(6);
     }
 }

@@ -127,7 +127,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/update-document-metadata/{id}', [DocumentController::class, 'updateDocumentMetadata']);
     Route::patch('/route-document/{id}', [DocumentController::class, 'routeDocument']);
     // custom / dms / features
-    Route::get('/documet/{id}/audit-logs', [DocumentController::class, 'getAuditLogs']);
+    Route::get('/document/{id}/get-document-audit-logs', [DocumentController::class, 'getAuditLogs']);
     Route::get('/document/{id}/versions', [DocumentController::class, 'getVersions']);
     Route::post('/document/{id}/routing-action', [DocumentController::class, 'storeRoutingAction']);
     Route::post('/document/{id}/log-action', [DocumentController::class, 'logAction']);

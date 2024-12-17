@@ -51,48 +51,42 @@ const ViewDocument = ({ document_id, document_status, assigned_to, current_user 
                             <label className="text-xs hover:cursor-pointer">Download</label>
                         </span>
                     </button>
-                    {status === 'Received' && current_user === assigned_to ? (
-                        <>
-                            <button
-                                onClick={handleRoute}
-                                className='flex flex-col items-center px-2 rounded font-medium'
-                                title='Route'
-                            >
-                                <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                        <path fillRule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                                    </svg>
-                                    <label className="text-xs hover:cursor-pointer">Route</label>
-                                </span>
-                            </button>
-                            <button
-                                onClick={handleReturn}
-                                className='flex flex-col items-center px-2 rounded font-medium'
-                                title='Return'
-                            >
-                                <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                        <path fillRule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
-                                    </svg>
-                                    <label className="text-xs hover:cursor-pointer">Return</label>
-                                </span>
-                            </button>
-                        </>
-                    ) : (
-                        <button
-                            onClick={handleReceive}
-                            className='flex flex-col items-center px-2 rounded font-medium'
-                            title='Receive'
-                        >
-                            <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                    <path fillRule="evenodd" d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
-                                    <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                                </svg>
-                                <label className="text-xs hover:cursor-pointer">Receive</label>
-                            </span>
-                        </button>
-                    )}
+                    <button
+                        onClick={handleRoute}
+                        className='flex flex-col items-center px-2 rounded font-medium'
+                        title='Route'
+                    >
+                        <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                <path fillRule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                            </svg>
+                            <label className="text-xs hover:cursor-pointer">Route</label>
+                        </span>
+                    </button>
+                    <button
+                        onClick={handleReturn}
+                        className='flex flex-col items-center px-2 rounded font-medium'
+                        title='Return'
+                    >
+                        <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                <path fillRule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
+                            </svg>
+                            <label className="text-xs hover:cursor-pointer">Return</label>
+                        </span>
+                    </button>
+                    <button
+                        onClick={handleReceive}
+                        className='flex flex-col items-center px-2 rounded font-medium'
+                        title='Receive'
+                    >
+                        <span className='flex flex-col items-center text-black hover:text-primary transition duration-300 ease-in-out'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
+                            </svg>
+                            <label className="text-xs hover:cursor-pointer">Receive</label>
+                        </span>
+                    </button>
                 </div>
                 <div>
                     <iframe

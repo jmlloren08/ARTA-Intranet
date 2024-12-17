@@ -2,15 +2,21 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Select from 'react-select';
 
 const RouteDocument = ({ isOpen, onClose, initialFormData, onAddSuccess }) => {
 
     const [formData, setFormData] = useState('');
+    const [names, setNames] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    const handleAssignedToChange = (selectedOptions) => {
+        setFormData({ ...formData, assigned_to: selectedOptions ? selectedOptions.map((option) => option.value) : [] });
     }
 
     const handleClose = () => {
@@ -23,6 +29,7 @@ const RouteDocument = ({ isOpen, onClose, initialFormData, onAddSuccess }) => {
         setLoading(true);
         try {
             const response = await axios.patch(`/route-document/${formData.id}`, {
+                assigned_to: formData.assigned_to,
                 remarks_instructions: formData.remarks_instructions
             });
             toast.success(response.data.message);
@@ -35,6 +42,16 @@ const RouteDocument = ({ isOpen, onClose, initialFormData, onAddSuccess }) => {
             onClose();
         }
     }
+
+    useEffect(() => {
+        axios.get('/get-names')
+            .then((response) => {
+                setNames(response.data.map(user => ({ value: user.id, label: user.name })));
+            })
+            .catch((error) => {
+                console.error(error.response?.data?.message || 'Error fetching data');
+            })
+    }, []);
 
     useEffect(() => {
         if (isOpen && initialFormData) {
@@ -59,6 +76,18 @@ const RouteDocument = ({ isOpen, onClose, initialFormData, onAddSuccess }) => {
                     <form onSubmit={handleModalSubmit} className='space-y-4'>
                         <input type='hidden' name='id' value={formData.id || ''} readOnly />
                         <div>
+                            <label className='block font-medium'>Route To</label>
+                            <Select
+                                isMulti
+                                options={names}
+                                value={names.filter(option => formData.assigned_to?.includes(option.value))}
+                                onChange={handleAssignedToChange}
+                                className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
+                                autoFocus={true}
+                                required
+                            />
+                        </div>
+                        <div>
                             <label className='block font-medium'>Remarks/Instructions</label>
                             <textarea
                                 name="remarks_instructions"
@@ -66,7 +95,6 @@ const RouteDocument = ({ isOpen, onClose, initialFormData, onAddSuccess }) => {
                                 value={formData.remarks_instructions || ''}
                                 onChange={handleChange}
                                 className='w-full p-2 border focus:outline-none focus:ring focus:ring-indigo-300 dark:bg-meta-4'
-                                autoFocus={true}
                                 required
                             />
                         </div>
